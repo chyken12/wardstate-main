@@ -1,19 +1,18 @@
 import React from "react";
 import AdmissionOutComeContext from './admissionOutcomeContext';
+import useAdmissionData from "./useAdmissionData";
 
 const AdmissionOutComeProvider = ({children}) => {
-  const [admissionData,setAdmissionData] = React.useState({
-    patientname: "",
-    age: "",
-    gender: "",
-    patientid: "",
-    insurancestatus: "",
-    admissionOutcome:'',
-    date : ''
-  })
-  const updateAdmissionData = (newData) => {
-    setAdmissionData((prevData) => ({...prevData, ...newData}))
+  const {admissionData,updateAdmissionData,loading,error} = useAdmissionData()
+  if (loading){
+    return <div>Loading....</div>
   }
+
+  if (error){
+    return <div>Error:{error}</div>
+  }
+  
+ 
   return(
    <AdmissionOutComeContext.Provider value={{admissionData,updateAdmissionData}}>
       {children}

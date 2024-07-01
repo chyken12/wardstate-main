@@ -1,8 +1,10 @@
-import React from "react";
+import React, {useContext,useState} from "react";
+import AdmissionOutComeContext from "@/contexts/admissionOutcomeContext";
 import DatePicker from "../DatePicker";
 import { Button } from "@/components/ui/button";
 import { buttonVariants } from "@/components/ui/button";
 import AdmissionForm from "../Forms/AdmissionForm";
+
 
 import {
   Table,
@@ -15,6 +17,28 @@ import {
 } from "@/components/ui/table";
 
 const AllAdmissions = () => {
+  const {admissionData, loading, error} = useContext(AdmissionOutComeContext)
+  const [searchTerm,setSearchTerm] = useState("")
+  
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const filteredData = admissionData.filter((admission) => {
+    const patientName = admission.patientName ? admission.patientName.toLowerCase() : "";
+    const search = searchTerm.toLowerCase();
+    return patientName.includes(search);
+  });
+
   return (
     <div>
       <div className="flex flex-col min-h-screen bg-gray-100 border-b-4 ml-10 mr-10">
@@ -37,6 +61,8 @@ const AllAdmissions = () => {
                   placeholder="Search by name..."
                   type="text"
                   name="search"
+                  value={searchTerm}
+                  onChange={handleSearch}
                 />
                 <Button variant="outline">Search</Button>
               </div>
@@ -58,13 +84,22 @@ const AllAdmissions = () => {
                 <TableHead>NHIS-Status</TableHead>
                 <TableHead>Patient-Name</TableHead>
                 <TableHead className="text-right">Admission-Outcome</TableHead>
-              </TableRow>
+              </TableRow >
             </TableHeader>
             <TableBody>
-              <TableRow>
-                <TableCell className="font-medium">ER-A06-AAA1234</TableCell>
-                <TableCell>non-INSURED</TableCell>
-                <TableCell>SAMUEL SARPONG ADADE</TableCell>
+            {filteredData.map((admission, index) => (
+                <TableRow key={index}>
+                  <TableCell className="font-medium">{admission.patientId}</TableCell>
+                  <TableCell>{admission.status}</TableCell>
+                  <TableCell>{admission.patientName}</TableCell>
+                  <TableCell className="text-right">{admission.admissionOutcome}</TableCell>
+                </TableRow>
+              ))}
+              {/* {filteredAdmissions.map((admission,index))}
+              <TableRow key={index}>
+                <TableCell className="font-medium">admission.patientId</TableCell>
+                <TableCell>admission.insuranceStatus</TableCell>
+                <TableCell>admission.patientName</TableCell>
                 <TableCell className="text-right">DISCHARGED</TableCell>
               </TableRow>
               <TableRow>
@@ -90,7 +125,7 @@ const AllAdmissions = () => {
                 <TableCell>non-INSURED</TableCell>
                 <TableCell>SAMUEL SARPONG ADADE</TableCell>
                 <TableCell className="text-right">DISCHARGED</TableCell>
-              </TableRow>
+              </TableRow> */}
             </TableBody>
           </Table>
         </main>

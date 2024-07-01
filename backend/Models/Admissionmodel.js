@@ -23,12 +23,12 @@ const admissionSchema = new mongoose.Schema(
       default: 'Admitted'
   },
   transferInDate: {
-    type: Date
+    type: Date 
 },
 transferOutDate: {
     type: Date
 },
-transferringHospital: {
+transferringWard: {
     type: String
 }
   },
@@ -38,4 +38,6 @@ transferringHospital: {
   }
 )
 
-export const Admission = mongoose.model('Admission',admissionSchema);
+const Admission = mongoose.model('Admission',admissionSchema);
+
+export default Admission;
