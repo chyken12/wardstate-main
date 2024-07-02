@@ -22,6 +22,11 @@ const admissionSchema = new mongoose.Schema(
       enum: ['Admitted', 'Discharged', 'Expired','Transferred'],
       default: 'Admitted'
   },
+  nhisStatus: {
+    type: String,
+    enum: ['Insured', 'NoneInsured'],
+    
+},
   transferInDate: {
     type: Date 
 },

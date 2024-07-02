@@ -90,9 +90,9 @@ const AllAdmissions = () => {
             {filteredData.map((admission, index) => (
                 <TableRow key={index}>
                   <TableCell className="font-medium">{admission.patientId}</TableCell>
-                  <TableCell>{admission.status}</TableCell>
+                  <TableCell>{admission.nhisStatus}</TableCell>
                   <TableCell>{admission.patientName}</TableCell>
-                  <TableCell className="text-right">{admission.admissionOutcome}</TableCell>
+                  <TableCell className="text-right">{admission.status}</TableCell>
                 </TableRow>
               ))}
               {/* {filteredAdmissions.map((admission,index))}

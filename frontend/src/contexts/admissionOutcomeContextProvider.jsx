@@ -3,7 +3,7 @@ import AdmissionOutComeContext from './admissionOutcomeContext';
 import useAdmissionData from "./useAdmissionData";
 
 const AdmissionOutComeProvider = ({children}) => {
-  const {admissionData,updateAdmissionData,loading,error} = useAdmissionData()
+  const {admissionData,allDischargesData,updateDischargeData,updateAdmissionData,loading,error} = useAdmissionData()
   if (loading){
     return <div>Loading....</div>
   }
@@ -14,7 +14,7 @@ const AdmissionOutComeProvider = ({children}) => {
   
  
   return(
-   <AdmissionOutComeContext.Provider value={{admissionData,updateAdmissionData}}>
+   <AdmissionOutComeContext.Provider value={{admissionData,allDischargesData,updateDischargeData,updateAdmissionData}}>
       {children}
    </AdmissionOutComeContext.Provider>
   )
