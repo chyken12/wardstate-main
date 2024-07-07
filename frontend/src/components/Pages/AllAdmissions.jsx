@@ -20,6 +20,7 @@ const AllAdmissions = () => {
   const {admissionData, loading, error} = useContext(AdmissionOutComeContext)
   const [searchTerm,setSearchTerm] = useState("")
   
+  
 
   if (loading) {
     return <div>Loading...</div>;
@@ -29,15 +30,23 @@ const AllAdmissions = () => {
     return <div>Error: {error}</div>;
   }
 
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-  };
+ // Function to handle the search input change
+const handleSearch = (e) => {
+  setSearchTerm(e.target.value);
+};
 
-  const filteredData = admissionData.filter((admission) => {
-    const patientName = admission.patientName ? admission.patientName.toLowerCase() : "";
-    const search = searchTerm.toLowerCase();
-    return patientName.includes(search);
-  });
+
+// Filtering the discharges based on name and date
+const filteredData = admissionData.filter((admission) => {
+  // Check if the patient name exists and convert to lowercase
+  const patientName = admission.patientName ? admission.patientName.toLowerCase() : '';
+  const search = searchTerm.toLowerCase();
+  // Check if the name matches the search term
+  const matchesSearchTerm = patientName.includes(search);
+  // Return true only if both conditions are satisfied
+  return matchesSearchTerm
+  
+});
 
   return (
     <div>
@@ -53,7 +62,9 @@ const AllAdmissions = () => {
           <div className="box-border border-2">
             <div className="flex flex-row justify-between py-2 px-3">
               <div className="flex flex-row">
-                <DatePicker />
+                <DatePicker 
+                 
+                 />
               </div>
               <div className="flex flex-row">
                 <input

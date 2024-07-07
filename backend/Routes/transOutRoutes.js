@@ -26,7 +26,7 @@ router.post('/', async (request, response) => {
 });
 
 // route to all trans outs
-router.get('/api/transfer-outs', async (request, response) => {
+router.get('/', async (request, response) => {
   try {
     const admissions = await Admission.find({ transferOutDate: { $exists: true } });
     response.status(200).json({ message: 'Transfer Out Data', transferOuts: admissions });

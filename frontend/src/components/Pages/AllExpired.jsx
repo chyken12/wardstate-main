@@ -1,8 +1,10 @@
-import React from "react";
+import React, {useContext,useState} from "react";
 import DatePicker from "../DatePicker";
 import { Button } from "@/components/ui/button";
 import { buttonVariants } from "@/components/ui/button";
 import AdmissionForm from "../Forms/AdmissionForm";
+import AdmissionOutComeContext from "@/contexts/admissionOutcomeContext";
+
 
 import {
   Table,
@@ -15,6 +17,39 @@ import {
 } from "@/components/ui/table";
 
 const AllExpired = () => {
+  const {allExpiredData ,loading,error}   = useContext(AdmissionOutComeContext)
+  const [searchTerm, setSearchTerm] = useState('')
+
+  
+  
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+ // Function to handle the search input change
+const handleSearch = (e) => {
+  setSearchTerm(e.target.value);
+};
+
+
+// Filtering the expired based on name and date
+const filteredExpired = allExpiredData.filter((Expired) => {
+  // Check if the patient name exists and convert to lowercase
+  const patientName =Expired.patientName ? Expired.patientName.toLowerCase() : '';
+  const search = searchTerm.toLowerCase();
+
+  // Check if the name matches the search term
+  const matchesSearchTerm = patientName.includes(search);
+
+
+
+  return matchesSearchTerm 
+});
+console.log("filteredexpired:", filteredExpired);
   return (
     <div>
       <div className="flex flex-col min-h-screen bg-gray-100 border-b-4 ml-10 mr-10">
@@ -37,6 +72,8 @@ const AllExpired = () => {
                   placeholder="Search by name..."
                   type="text"
                   name="search"
+                  value={searchTerm}
+                  onChange={handleSearch}
                 />
                 <Button variant="outline">Search</Button>
               </div>
@@ -55,36 +92,17 @@ const AllExpired = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              <TableRow>
-                <TableCell className="font-medium">ER-A06-AAA1234</TableCell>
-                <TableCell>non-INSURED</TableCell>
-                <TableCell>SAMUEL SARPONG ADADE</TableCell>
-                <TableCell className="text-right">DISCHARGED</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">ER-A06-AAA1234</TableCell>
-                <TableCell>non-INSURED</TableCell>
-                <TableCell>SAMUEL SARPONG ADADE</TableCell>
-                <TableCell className="text-right">DISCHARGED</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">ER-A06-AAA1234</TableCell>
-                <TableCell>non-INSURED</TableCell>
-                <TableCell>SAMUEL SARPONG ADADE</TableCell>
-                <TableCell className="text-right">DISCHARGED</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">ER-A06-AAA1234</TableCell>
-                <TableCell>non-INSURED</TableCell>
-                <TableCell>SAMUEL SARPONG ADADE</TableCell>
-                <TableCell className="text-right">DISCHARGED</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">ER-A06-AAA1234</TableCell>
-                <TableCell>non-INSURED</TableCell>
-                <TableCell>SAMUEL SARPONG ADADE</TableCell>
-                <TableCell className="text-right">DISCHARGED</TableCell>
-              </TableRow>
+            {filteredExpired.map((Expired,index) => (
+                <TableRow key={index}>
+                  <TableCell className="font-medium">{Expired.patientId}</TableCell>
+                  <TableCell>{Expired.nhisStatus}</TableCell>
+                  <TableCell>{Expired.patientName}</TableCell>
+                  <TableCell className="text-right">{Expired.status}</TableCell>
+                </TableRow>
+              ))}
+              
+              
+             
             </TableBody>
           </Table>
         </main>

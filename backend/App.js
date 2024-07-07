@@ -23,6 +23,7 @@ app.use('/api/admission',AdmissionsRoutes)
 app.use('/api/discharges',DischargesRoutes)
 app.use('/api/expired', ExpiredRoutes)
 app.use('/api/transin',transInRoutes)
+app.use('/api/transout',transOutRoutes)
 
 mongoose
 .connect(mongoDBURL)

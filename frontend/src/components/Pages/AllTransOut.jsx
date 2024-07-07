@@ -1,6 +1,7 @@
-import React from "react";
+import React, {useContext,useState} from "react";
 import DatePicker from "../DatePicker";
 import { Button } from "@/components/ui/button";
+import AdmissionOutComeContext from "@/contexts/admissionOutcomeContext";
 import { buttonVariants } from "@/components/ui/button";
 import AdmissionForm from "../Forms/AdmissionForm";
 
@@ -15,6 +16,39 @@ import {
 } from "@/components/ui/table";
 
 const AllTransOut = () => {
+  const {allTransOutData ,loading,error}   = useContext(AdmissionOutComeContext)
+  const [searchTerm, setSearchTerm] = useState('')
+
+  
+  
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+ // Function to handle the search input change
+const handleSearch = (e) => {
+  setSearchTerm(e.target.value);
+};
+
+
+// Filtering the discharges based on name and date
+const filteredTransOut = allTransOutData.filter((transout) => {
+  // Check if the patient name exists and convert to lowercase
+  const patientName =transout.patientName ? transout.patientName.toLowerCase() : '';
+  const search = searchTerm.toLowerCase();
+
+  // Check if the name matches the search term
+  const matchesSearchTerm = patientName.includes(search);
+
+
+
+  return matchesSearchTerm 
+});
+console.log(allTransOutData)
   return (
     <div>
       <div className="flex flex-col min-h-screen bg-gray-100 border-b-4 ml-10 mr-10">

@@ -18,11 +18,10 @@ import {
 
 const AllDischarges = () => {
   const {allDischargesData ,loading,error}   = useContext(AdmissionOutComeContext)
-  const [searchDate, setSearchDate] = useState(null)
+  const [searchTerm, setSearchTerm] = useState('')
 
   
-  console.log("allDischargesData:", AllDischarges);
-  console.log("searchDate:", searchDate);
+  
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -31,15 +30,28 @@ const AllDischarges = () => {
     return <div>Error: {error}</div>;
   }
 
-   // Filter discharges based on searchDate
-   // Ensure allDischargesData is an array
- // Filter discharges based on searchDate
- const filteredDischarges = allDischargesData.filter((discharge) => {
-  if (!searchDate) return true; // No date selected, show all
-  const dischargeDate = new Date(discharge.dischargeDate); // Assuming dischargeDate is in the data
-  return dischargeDate.toDateString() === searchDate.toDateString();
+ // Function to handle the search input change
+const handleSearch = (e) => {
+  setSearchTerm(e.target.value);
+};
+
+
+// Filtering the discharges based on name and date
+const filteredDischarges = allDischargesData.filter((discharge) => {
+  // Check if the patient name exists and convert to lowercase
+  const patientName = discharge.patientName ? discharge.patientName.toLowerCase() : '';
+  const search = searchTerm.toLowerCase();
+
+  // Check if the name matches the search term
+  const matchesSearchTerm = patientName.includes(search);
+
+  // Check if the date matches the search date (if any)
+  
+
+  // Return true only if both conditions are satisfied
+  return matchesSearchTerm 
 });
-  console.log("filteredDischarges:", filteredDischarges);
+ 
   return (
     <div>
       <div className="flex flex-col min-h-screen bg-gray-100 border-b-4 ml-10 mr-10">
@@ -55,8 +67,8 @@ const AllDischarges = () => {
             <div className="flex flex-row justify-between py-2 px-3">
               <div className="flex flex-row">
                 <DatePicker 
-                selectedDate={searchDate}
-                onChange={setSearchDate}/>
+                
+                />
               </div>
               <div className="flex flex-row">
                 <input
@@ -64,6 +76,8 @@ const AllDischarges = () => {
                   placeholder="Search by name..."
                   type="text"
                   name="search"
+                  value={searchTerm}
+                  onChange={handleSearch}
                 />
                 <Button variant="outline">Search</Button>
               </div>

@@ -1,10 +1,14 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import AllDischarges from "@/components/Pages/AllDischarges";
+import ExpiredForm from "@/components/Forms/ExpiredForm";
 
 const useAdmissionData = () => {
   const [admissionData, setAdmissionData] = useState([]);
   const [allDischargesData, setAllDischaregsData] = useState([]);
+  const [allExpiredData, setAllExpiredData] = useState([]);
+  const [allTransInData, setAllTransInData] = useState([]);
+ 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -19,6 +23,39 @@ const useAdmissionData = () => {
       console.log("API Response:", response.data);
     } catch (error) {
       setError(`Error fetching data: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const fetchTransInData = async () => {
+    try {
+      const response = await axios.get("http://localhost:8000/api/transin");
+      // Ensure response data is an array
+      const data = Array.isArray(response.data)
+        ? response.data
+        : [response.data];
+      setAllTransInData(data);
+      console.log("API Response:", response.data);
+    } catch (error) {
+      setError(`Error fetching data: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateAllTransInData = async (newData) => {
+    try {
+      setLoading(true);
+      await axios.put("http://localhost:8000/api/transin", newData);
+      setAdmissionData((prevData) =>
+        prevData.map((transfer) =>
+          transfer.patientId === newData.patientId
+            ? { ...transfer, ...newData }
+            : transfer
+        )
+      );
+    } catch (err) {
+      setError(`Error updating data: ${err.message}`);
     } finally {
       setLoading(false);
     }
@@ -51,8 +88,8 @@ const useAdmissionData = () => {
       const data = Array.isArray(response.data)
         ? response.data
         : [response.data];
-      setAllDischaregsData(response.data);
-      console.log("API discharge Response:", response.data);
+      setAllDischaregsData(data);
+     
      
     } catch (error) {
       setError(`error fetching data: ${error.message}`);
@@ -80,16 +117,70 @@ const useAdmissionData = () => {
     }
   };
 
+  const fetchAllExpired= async () => {
+    try {
+      const response = await axios.get("http://localhost:8000/api/expired");
+      // ensure response data is an array
+      const data = Array.isArray(response.data)
+        ? response.data
+        : [response.data];
+      setAllExpiredData(response.data);
+     
+    } catch (error) {
+      setError(`error fetching data: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Update discharge data
+  const updateExpiredData = async (newData) => {
+    try {
+      setLoading(true);
+      await axios.put("http://localhost:8000/api/expired", newData);
+      setAllExpiredData((prevData) =>
+        prevData.map((expired) =>
+          expired.patientId === newData.patientId
+            ? { ...expired, ...newData }
+            : expired
+        )
+      );
+    } catch (err) {
+      setError(`Error updating discharge data: ${err.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+ 
+
+ 
+
+ 
+
+
+  
+
   useEffect(() => {
     fetchAdmissionData();
     fetchAllDicharges();
+    fetchAllExpired()
+    fetchTransInData()
+   
   }, []);
 
   return {
     admissionData,
     allDischargesData,
+    allExpiredData,
+    allTransInData,
     updateAdmissionData,
     updateDischargeData,
+    updateExpiredData,
+    updateAllTransInData,
+  
+
     loading,
     error,
   };

@@ -1,8 +1,10 @@
-import React from "react";
+import React, {useContext,useState} from "react";
+import AdmissionOutComeContext from "@/contexts/admissionOutcomeContext";
 import DatePicker from "../DatePicker";
 import { Button } from "@/components/ui/button";
 import { buttonVariants } from "@/components/ui/button";
 import AdmissionForm from "../Forms/AdmissionForm";
+
 
 import {
   Table,
@@ -14,7 +16,38 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-const AllTransIn = () => {
+const AllTransin = () => {
+  const {allTransInData=[], loading, error} = useContext(AdmissionOutComeContext)
+  const [searchTerm,setSearchTerm] = useState("")
+  
+  
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+ // Function to handle the search input change
+const handleSearch = (e) => {
+  setSearchTerm(e.target.value);
+};
+
+
+// Filtering the discharges based on name and date
+const filteredTransIn = allTransInData.filter((transin) => {
+  // Check if the patient name exists and convert to lowercase
+  const patientName = transin.patientName ? transin.patientName.toLowerCase() : '';
+  const search = searchTerm.toLowerCase();
+  // Check if the name matches the search term
+  const matchesSearchTerm = patientName.includes(search);
+  // Return true only if both conditions are satisfied
+  return matchesSearchTerm
+  
+});
+
   return (
     <div>
       <div className="flex flex-col min-h-screen bg-gray-100 border-b-4 ml-10 mr-10">
@@ -29,7 +62,9 @@ const AllTransIn = () => {
           <div className="box-border border-2">
             <div className="flex flex-row justify-between py-2 px-3">
               <div className="flex flex-row">
-                <DatePicker />
+                <DatePicker 
+                 
+                 />
               </div>
               <div className="flex flex-row">
                 <input
@@ -37,53 +72,40 @@ const AllTransIn = () => {
                   placeholder="Search by name..."
                   type="text"
                   name="search"
+                  value={searchTerm}
+                  onChange={handleSearch}
                 />
                 <Button variant="outline">Search</Button>
               </div>
             </div>
           </div>
-         
+          <div className="flex flex-row border-b border-gray-200 px-4 py-2  ">
+            <div className="flex flex-row justify-between mt-5 ">
+              
+             
+            </div>
+            <div />
+          </div>
+
           <Table>
-            <TableCaption>A list of all trans-in</TableCaption>
+            <TableCaption>A list of all transin.</TableCaption>
             <TableHeader>
               <TableRow>
                 <TableHead className="w-[100px]">PatientID</TableHead>
                 <TableHead>NHIS-Status</TableHead>
                 <TableHead>Patient-Name</TableHead>
                 <TableHead className="text-right">Admission-Outcome</TableHead>
-              </TableRow>
+              </TableRow >
             </TableHeader>
             <TableBody>
-              <TableRow>
-                <TableCell className="font-medium">ER-A06-AAA1234</TableCell>
-                <TableCell>non-INSURED</TableCell>
-                <TableCell>SAMUEL SARPONG ADADE</TableCell>
-                <TableCell className="text-right">DISCHARGED</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">ER-A06-AAA1234</TableCell>
-                <TableCell>non-INSURED</TableCell>
-                <TableCell>SAMUEL SARPONG ADADE</TableCell>
-                <TableCell className="text-right">DISCHARGED</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">ER-A06-AAA1234</TableCell>
-                <TableCell>non-INSURED</TableCell>
-                <TableCell>SAMUEL SARPONG ADADE</TableCell>
-                <TableCell className="text-right">DISCHARGED</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">ER-A06-AAA1234</TableCell>
-                <TableCell>non-INSURED</TableCell>
-                <TableCell>SAMUEL SARPONG ADADE</TableCell>
-                <TableCell className="text-right">DISCHARGED</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">ER-A06-AAA1234</TableCell>
-                <TableCell>non-INSURED</TableCell>
-                <TableCell>SAMUEL SARPONG ADADE</TableCell>
-                <TableCell className="text-right">DISCHARGED</TableCell>
-              </TableRow>
+            {filteredTransIn.map((transin, index) => (
+                <TableRow key={index}>
+                  <TableCell className="font-medium">{transin.patientId}</TableCell>
+                  <TableCell>{transin.nhisStatus}</TableCell>
+                  <TableCell>{transin.patientName}</TableCell>
+                  <TableCell className="text-right">{transin.status}</TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </main>
@@ -92,5 +114,4 @@ const AllTransIn = () => {
   );
 };
 
-export default AllTransIn;
-
+export default AllTransin;
