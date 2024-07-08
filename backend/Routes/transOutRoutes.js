@@ -14,11 +14,11 @@ router.post('/', async (request, response) => {
   const { id, ...transferOutData } = request.body; // Destructure transfer out data
 
   try {
-    const admission = await Admission.findByIdAndUpdate(id, transferOutData, { new: true }); // Update existing admission
-    if (!admission) {
+    const transout = await Admission.findByIdAndUpdate(id, transferOutData, { new: true }); // Update existing admission
+    if (!transout) {
       return response.status(404).json({ message: 'Admission not found' });
     }
-    response.status(200).json({ message: 'Transfer Out successful!', admission });
+    response.status(200).json({ message: 'Transfer Out successful!', transout });
   } catch (err) {
     console.error(err);
     response.status(500).json({ message: 'Error updating admission' });
@@ -28,8 +28,8 @@ router.post('/', async (request, response) => {
 // route to all trans outs
 router.get('/', async (request, response) => {
   try {
-    const admissions = await Admission.find({ transferOutDate: { $exists: true } });
-    response.status(200).json({ message: 'Transfer Out Data', transferOuts: admissions });
+    const transout = await Admission.find({transferOutDate: { $exists: true } });
+    response.json(transout);
   } catch (err) {
     console.error(err);
     response.status(500).json({ message: 'Error retrieving transfer out data' });

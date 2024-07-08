@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/table";
 
 const AllTransin = () => {
-  const {allTransInData=[], loading, error} = useContext(AdmissionOutComeContext)
+  const {allTransInData, loading, error} = useContext(AdmissionOutComeContext)
   const [searchTerm,setSearchTerm] = useState("")
   
   
@@ -36,17 +36,18 @@ const handleSearch = (e) => {
 };
 
 
-// Filtering the discharges based on name and date
+
 const filteredTransIn = allTransInData.filter((transin) => {
   // Check if the patient name exists and convert to lowercase
   const patientName = transin.patientName ? transin.patientName.toLowerCase() : '';
   const search = searchTerm.toLowerCase();
   // Check if the name matches the search term
   const matchesSearchTerm = patientName.includes(search);
-  // Return true only if both conditions are satisfied
+ 
   return matchesSearchTerm
   
 });
+console.log("filteredTransIn :", filteredTransIn)
 
   return (
     <div>

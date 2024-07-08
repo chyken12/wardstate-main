@@ -8,7 +8,7 @@ const useAdmissionData = () => {
   const [allDischargesData, setAllDischaregsData] = useState([]);
   const [allExpiredData, setAllExpiredData] = useState([]);
   const [allTransInData, setAllTransInData] = useState([]);
- 
+  const [allTransOutData, setAllTransOutData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -20,22 +20,7 @@ const useAdmissionData = () => {
         ? response.data
         : [response.data];
       setAdmissionData(data);
-      console.log("API Response:", response.data);
-    } catch (error) {
-      setError(`Error fetching data: ${error.message}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-  const fetchTransInData = async () => {
-    try {
-      const response = await axios.get("http://localhost:8000/api/transin");
-      // Ensure response data is an array
-      const data = Array.isArray(response.data)
-        ? response.data
-        : [response.data];
-      setAllTransInData(data);
-      console.log("API Response:", response.data);
+     
     } catch (error) {
       setError(`Error fetching data: ${error.message}`);
     } finally {
@@ -43,23 +28,6 @@ const useAdmissionData = () => {
     }
   };
 
-  const updateAllTransInData = async (newData) => {
-    try {
-      setLoading(true);
-      await axios.put("http://localhost:8000/api/transin", newData);
-      setAdmissionData((prevData) =>
-        prevData.map((transfer) =>
-          transfer.patientId === newData.patientId
-            ? { ...transfer, ...newData }
-            : transfer
-        )
-      );
-    } catch (err) {
-      setError(`Error updating data: ${err.message}`);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   // Function to update admission data on the backend
   const updateAdmissionData = async (newData) => {
@@ -152,6 +120,75 @@ const useAdmissionData = () => {
     }
   };
 
+  const fetchTransInData = async () => {
+    try {
+      const response = await axios.get("http://localhost:8000/api/transin");
+      // Ensure response data is an array
+      const data = Array.isArray(response.data)
+        ? response.data
+        : [response.data];
+      setAllTransInData(data);
+     
+    } catch (error) {
+      setError(`Error fetching data: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateAllTransInData = async (newData) => {
+    try {
+      setLoading(true);
+      await axios.put("http://localhost:8000/api/transin", newData);
+      setAllTransInData((prevData) =>
+        prevData.map((transfer) =>
+          transfer.patientId === newData.patientId
+            ? { ...transfer, ...newData }
+            : transfer
+        )
+      );
+    } catch (err) {
+      setError(`Error updating data: ${err.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  const fetchTransOutData = async () => {
+    try {
+      const response = await axios.get("http://localhost:8000/api/transout");
+      // Ensure response data is an array
+      const data = Array.isArray(response.data)
+        ? response.data
+        : [response.data];
+      setAllTransOutData(data);
+      console.log("transout Response:", response.data);
+    } catch (error) {
+      setError(`Error fetching data: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateAllTransOutData = async (newData) => {
+    try {
+      setLoading(true);
+      await axios.put("http://localhost:8000/api/transout", newData);
+      setAllTransOutData((prevData) =>
+        prevData.map((transfer) =>
+          transfer.patientId === newData.patientId
+            ? { ...transfer, ...newData }
+            : transfer
+        )
+      );
+    } catch (err) {
+      setError(`Error updating data: ${err.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
  
 
@@ -167,6 +204,7 @@ const useAdmissionData = () => {
     fetchAllDicharges();
     fetchAllExpired()
     fetchTransInData()
+    fetchTransOutData
    
   }, []);
 
@@ -175,10 +213,12 @@ const useAdmissionData = () => {
     allDischargesData,
     allExpiredData,
     allTransInData,
+    allTransOutData,
     updateAdmissionData,
     updateDischargeData,
     updateExpiredData,
     updateAllTransInData,
+    updateAllTransOutData,
   
 
     loading,

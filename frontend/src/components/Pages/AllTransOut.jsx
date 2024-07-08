@@ -48,7 +48,7 @@ const filteredTransOut = allTransOutData.filter((transout) => {
 
   return matchesSearchTerm 
 });
-console.log(allTransOutData)
+console.log("allTransOutData:", filteredTransOut )
   return (
     <div>
       <div className="flex flex-col min-h-screen bg-gray-100 border-b-4 ml-10 mr-10">
@@ -89,36 +89,14 @@ console.log(allTransOutData)
               </TableRow>
             </TableHeader>
             <TableBody>
-              <TableRow>
-                <TableCell className="font-medium">ER-A06-AAA1234</TableCell>
-                <TableCell>non-INSURED</TableCell>
-                <TableCell>SAMUEL SARPONG ADADE</TableCell>
-                <TableCell className="text-right">DISCHARGED</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">ER-A06-AAA1234</TableCell>
-                <TableCell>non-INSURED</TableCell>
-                <TableCell>SAMUEL SARPONG ADADE</TableCell>
-                <TableCell className="text-right">DISCHARGED</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">ER-A06-AAA1234</TableCell>
-                <TableCell>non-INSURED</TableCell>
-                <TableCell>SAMUEL SARPONG ADADE</TableCell>
-                <TableCell className="text-right">DISCHARGED</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">ER-A06-AAA1234</TableCell>
-                <TableCell>non-INSURED</TableCell>
-                <TableCell>SAMUEL SARPONG ADADE</TableCell>
-                <TableCell className="text-right">DISCHARGED</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">ER-A06-AAA1234</TableCell>
-                <TableCell>non-INSURED</TableCell>
-                <TableCell>SAMUEL SARPONG ADADE</TableCell>
-                <TableCell className="text-right">DISCHARGED</TableCell>
-              </TableRow>
+            {filteredTransOut.map((transout, index) => (
+                <TableRow key={index}>
+                  <TableCell className="font-medium">{transout.patientId}</TableCell>
+                  <TableCell>{transout.nhisStatus}</TableCell>
+                  <TableCell>{transout.patientName}</TableCell>
+                  <TableCell className="text-right">{transout.status}</TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </main>

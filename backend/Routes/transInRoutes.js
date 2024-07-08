@@ -25,8 +25,8 @@ router.post('/', async (request, response) => {
 //route to all trans ins
 router.get('/', async (request, response) => {
   try {
-    const admissions = await Admission.find({ transferInDate: { $exists: true } });
-    response.status(200).json({ message: 'Transfer in Data', transferIns: admissions });
+    const transin = await Admission.find({ transferInDate: { $exists: true } });
+    response.json(transin)
   } catch (err) {
     console.error(err);
     response.status(500).json({ message: 'Error retrieving transfer in data' });

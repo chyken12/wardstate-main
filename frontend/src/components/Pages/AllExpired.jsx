@@ -36,7 +36,7 @@ const handleSearch = (e) => {
 };
 
 
-// Filtering the expired based on name and date
+
 const filteredExpired = allExpiredData.filter((Expired) => {
   // Check if the patient name exists and convert to lowercase
   const patientName =Expired.patientName ? Expired.patientName.toLowerCase() : '';

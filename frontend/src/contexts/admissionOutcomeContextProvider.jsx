@@ -7,6 +7,8 @@ const AdmissionOutComeProvider = ({ children }) => {
     admissionData,
     allDischargesData,
     allExpiredData,
+    allTransInData,
+    allTransOutData,
    
 
 
@@ -14,6 +16,8 @@ const AdmissionOutComeProvider = ({ children }) => {
     updateDischargeData,
     updateAdmissionData,
     updateExpiredData,
+    updateAllTransInData,
+    updateAllTransOutData,
   
     loading,
     error,
@@ -32,10 +36,12 @@ const AdmissionOutComeProvider = ({ children }) => {
         admissionData,
         allDischargesData,
         allExpiredData,
+        allTransInData,
+        allTransOutData,
         updateDischargeData,
         updateAdmissionData,
-        updateTransInData,
-        updateTransOutData,
+        updateAllTransInData,
+        updateAllTransOutData,
         updateExpiredData
       }}
     >
