@@ -47,7 +47,7 @@ const filteredTransIn = allTransInData.filter((transin) => {
   return matchesSearchTerm
   
 });
-console.log("filteredTransIn :", filteredTransIn)
+
 
   return (
     <div>
@@ -93,9 +93,10 @@ console.log("filteredTransIn :", filteredTransIn)
             <TableHeader>
               <TableRow>
                 <TableHead className="w-[100px]">PatientID</TableHead>
-                <TableHead>NHIS-Status</TableHead>
+                <TableHead>Ward</TableHead>
                 <TableHead>Patient-Name</TableHead>
-                <TableHead className="text-right">Admission-Outcome</TableHead>
+                <TableHead>NHIS-Status</TableHead>
+                <TableHead className="text-right">Trans-OutDate</TableHead>
               </TableRow >
             </TableHeader>
             <TableBody>
@@ -104,7 +105,7 @@ console.log("filteredTransIn :", filteredTransIn)
                   <TableCell className="font-medium">{transin.patientId}</TableCell>
                   <TableCell>{transin.nhisStatus}</TableCell>
                   <TableCell>{transin.patientName}</TableCell>
-                  <TableCell className="text-right">{transin.status}</TableCell>
+                  <TableCell className="text-right">{transin. transferInDate}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

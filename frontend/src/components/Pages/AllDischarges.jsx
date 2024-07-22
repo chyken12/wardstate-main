@@ -44,11 +44,11 @@ const filteredDischarges = allDischargesData.filter((discharge) => {
 
   // Check if the name matches the search term
   const matchesSearchTerm = patientName.includes(search);
+  if (allDischargesData.length === 0) {
+    return <p>No discharge data available.</p>;
+  }
 
-  // Check if the date matches the search date (if any)
   
-
-  // Return true only if both conditions are satisfied
   return matchesSearchTerm 
 });
  

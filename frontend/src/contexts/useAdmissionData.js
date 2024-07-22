@@ -28,6 +28,9 @@ const useAdmissionData = () => {
     }
   };
 
+ 
+
+
 
   // Function to update admission data on the backend
   const updateAdmissionData = async (newData) => {
@@ -47,6 +50,7 @@ const useAdmissionData = () => {
       setLoading(false);
     }
   };
+
 
   // function to fetch all discharges
   const fetchAllDicharges = async () => {
@@ -162,6 +166,7 @@ const useAdmissionData = () => {
       const data = Array.isArray(response.data)
         ? response.data
         : [response.data];
+        console.log('Processed Data:', data);
       setAllTransOutData(data);
       console.log("transout Response:", response.data);
     } catch (error) {
@@ -189,6 +194,7 @@ const useAdmissionData = () => {
     }
   };
 
+ 
 
  
 
@@ -204,7 +210,8 @@ const useAdmissionData = () => {
     fetchAllDicharges();
     fetchAllExpired()
     fetchTransInData()
-    fetchTransOutData
+    fetchTransOutData()
+    
    
   }, []);
 

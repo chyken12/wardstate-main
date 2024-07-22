@@ -83,18 +83,18 @@ console.log("allTransOutData:", filteredTransOut )
             <TableHeader>
               <TableRow>
                 <TableHead className="w-[100px]">PatientID</TableHead>
-                <TableHead>NHIS-Status</TableHead>
+                <TableHead>Ward</TableHead>
                 <TableHead>Patient-Name</TableHead>
-                <TableHead className="text-right">Admission-Outcome</TableHead>
+                <TableHead className="text-right">Trans-OutDate</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
             {filteredTransOut.map((transout, index) => (
                 <TableRow key={index}>
                   <TableCell className="font-medium">{transout.patientId}</TableCell>
-                  <TableCell>{transout.nhisStatus}</TableCell>
+                  <TableCell>{transout.transferringWard}</TableCell>
                   <TableCell>{transout.patientName}</TableCell>
-                  <TableCell className="text-right">{transout.status}</TableCell>
+                  <TableCell className="text-right">{transout.transferOutDate}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

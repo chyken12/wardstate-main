@@ -7,9 +7,14 @@ const admissionSchema = new mongoose.Schema(
       required: true
   },
   patientId: {
-      type: String,
-      required: true
-  },
+    type: String,
+    required: true
+},
+  Age: {
+    type: Number,
+    required: true
+},
+ 
   admissionDate: {
       type: Date,
       default: Date.now
@@ -19,16 +24,24 @@ const admissionSchema = new mongoose.Schema(
   },
   status: {
       type: String,
-      enum: ['Admitted', 'Discharged', 'Expired','Transferred'],
-      default: 'Admitted'
+      enum: ['Admitted', 'Discharged', 'Expired','TransferedOut','TransferIn'],
+     
   },
+  Gender: {
+    type: String,
+    enum: ['Male', 'Female', 'Other'],
+    
+},
   nhisStatus: {
     type: String,
-    enum: ['Insured', 'NoneInsured'],
+    enum: ['Insured', 'NonInsured'],
     
 },
   transferInDate: {
     type: Date 
+},
+expiredDate: {
+  type: Date 
 },
 transferOutDate: {
     type: Date

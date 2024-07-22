@@ -4,6 +4,7 @@ import useAdmissionData from "./useAdmissionData";
 
 const AdmissionOutComeProvider = ({ children }) => {
   const {
+
     admissionData,
     allDischargesData,
     allExpiredData,
@@ -33,6 +34,7 @@ const AdmissionOutComeProvider = ({ children }) => {
   return (
     <AdmissionOutComeContext.Provider
       value={{
+       
         admissionData,
         allDischargesData,
         allExpiredData,

@@ -98,7 +98,7 @@ const filteredData = admissionData.filter((admission) => {
               </TableRow >
             </TableHeader>
             <TableBody>
-            {filteredData.map((admission, index) => (
+            {filteredData.map((admission,index) => (
                 <TableRow key={index}>
                   <TableCell className="font-medium">{admission.patientId}</TableCell>
                   <TableCell>{admission.nhisStatus}</TableCell>
@@ -106,37 +106,6 @@ const filteredData = admissionData.filter((admission) => {
                   <TableCell className="text-right">{admission.status}</TableCell>
                 </TableRow>
               ))}
-              {/* {filteredAdmissions.map((admission,index))}
-              <TableRow key={index}>
-                <TableCell className="font-medium">admission.patientId</TableCell>
-                <TableCell>admission.insuranceStatus</TableCell>
-                <TableCell>admission.patientName</TableCell>
-                <TableCell className="text-right">DISCHARGED</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">ER-A06-AAA1234</TableCell>
-                <TableCell>non-INSURED</TableCell>
-                <TableCell>SAMUEL SARPONG ADADE</TableCell>
-                <TableCell className="text-right">DISCHARGED</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">ER-A06-AAA1234</TableCell>
-                <TableCell>non-INSURED</TableCell>
-                <TableCell>SAMUEL SARPONG ADADE</TableCell>
-                <TableCell className="text-right">DISCHARGED</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">ER-A06-AAA1234</TableCell>
-                <TableCell>non-INSURED</TableCell>
-                <TableCell>SAMUEL SARPONG ADADE</TableCell>
-                <TableCell className="text-right">DISCHARGED</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">ER-A06-AAA1234</TableCell>
-                <TableCell>non-INSURED</TableCell>
-                <TableCell>SAMUEL SARPONG ADADE</TableCell>
-                <TableCell className="text-right">DISCHARGED</TableCell>
-              </TableRow> */}
             </TableBody>
           </Table>
         </main>
