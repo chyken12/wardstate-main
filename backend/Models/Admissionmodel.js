@@ -34,7 +34,7 @@ const admissionSchema = new mongoose.Schema(
 },
   nhisStatus: {
     type: String,
-    enum: ['Insured', 'NonInsured'],
+    enum: ['Active', 'InActive'],
     
 },
   transferInDate: {

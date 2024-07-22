@@ -1,39 +1,44 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import DatePicker from "../DatePicker";
-import axios from "axios";
 
-const AddAdmission = () => {
+
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+
+  const AdmissionForm = () => {
   const [patientName, setPatientName] = useState("");
   const [loading, setLoading] = useState(false);
   const [patientId, setPatientId] = useState("");
   const [Age, setAge] = useState("");
   const [gender, setGender] = useState("");
   const [nhisStatus, setNhisStatus] = useState("");
+  const [admissionDate, setAdmissionDate] = useState("");
+  const [expiredDate, setExpiredDate] = useState("");
+  const [admissionOutcome,setAdmissionOutcom] = useState("Admitted")
   const [transferInDate, setTransferInDate] = useState("");
   const [transferOutDate, setTransferOutDate] = useState("");
-  const [admissionDate, setAdmissionDate] = useState("");
-  const [dischargeDate, setDischargeDate] = useState("");
-  const [expiredDate, setExpiredDate] = useState("");
+  const [dischargedDate,setDischargedDate] = useState('')
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+
+  
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    // Form validation
-    if (
-      !patientName ||
-      !patientId ||
-      !Age ||
-      !gender ||
-      nhisStatus === "Select" ||
-      !admissionDate
-    ) {
+    if (!patientName || !patientId || !Age || !gender  || !admissionDate) {
       setError("All fields are required.");
+      
       return;
+     
     }
+    
     const data = {
       patientName,
       patientId,
@@ -41,7 +46,10 @@ const AddAdmission = () => {
       gender,
       nhisStatus,
       admissionDate,
+      expiredDate,
     };
+
+   
 
     setLoading(true);
     axios
@@ -54,245 +62,223 @@ const AddAdmission = () => {
         setLoading(false);
         const errorMsg = error.response?.data?.message || error.message;
         setError(errorMsg);
-        console.error("Submission error: ", errorMsg); // Debugging line
-        console.error("Error details: ", error.response?.data || error); // Detailed error info
+        console.error("Submission error: ", errorMsg);
+        console.error("Error details: ", error.response?.data || error);
       });
   };
-
   if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
+        return <div>Loading...</div>;
+      }
+    
+      if (error) {
+        return <div>Error: {error}</div>;
+      }
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100 border-b-4 ml-10 mr-10">
-      <header className="flex flex-row justify-between bg-white shadow px-4 py-2">
-        <div className="text-xl font-bold">KWAHU GOVERNMENT HOSPITAL</div>
-        <div className="text-xl font-bold">User info</div>
-      </header>
-      <div className="flex flex-row justify-between bg-gray-200 px-4 py-2">
-        <div className="text-sm font-medium">DAILY WARD STATE</div>
-      </div>
-      <main className="flex flex-col flex-grow px-4 py-4 rounded">
-        <div className="box-border border-2">
-          <div className="flex flex-row justify-between py-2 px-3">
-            <div className="flex flex-row">
-              <div className="px-16">
-                <h1>ADD EVENT</h1>
-              </div>
-            </div>
+    <Card className="w-full max-w-md mx-auto p-4">
+      <CardHeader>
+        <CardTitle>Patient Information</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="patient-id">Patient-ID</Label>
+          <Input id="patient-id" placeholder="Enter Patient ID eg. ER-A06-AAA1234..." value={patientId} onChange={(e) => setPatientId(e.target.value)} />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="patientName">Name</Label>
+          <Input id="patientName" placeholder="Enter Patient Name eg. Samuel Sarpong" value={patientName} onChange={(e) => setPatientName(e.target.value)} />
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="nhisStatus">Insurance-Status</Label>
+            <Select value={nhisStatus} onValueChange={(value) => setNhisStatus(value)}>
+              <SelectTrigger id="nhisStatus">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Active">Active</SelectItem>
+                <SelectItem value="InActive">InAcctive</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="gender">Gender</Label>
+            <Select value={gender} onValueChange={(value) => setGender(value)}>
+              <SelectTrigger id="gender">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="male">Male</SelectItem>
+                <SelectItem value="female">Female</SelectItem>
+                <SelectItem value="other">Other</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
-        <div className="flex flex-row border-b border-gray-200 px-4 py-2">
-          <div className="flex flex-row justify-between mt-5">
-            <div className="flex flex-row space-x-2">
-              <div className="flex">
-                <Link to="/admissionform">
-                  <Button
-                    className="shadow-sm py-2 focus:outline-none focus:border-sky-500 focus:ring-1 sm:text-sm"
-                    variant="outline"
-                  >
-                    Admission
-                  </Button>
-                </Link>
-                <Link to="/dischargeform">
-                  <Button
-                    className="shadow-sm py-2 focus:outline-none focus:border-sky-500 focus:ring-1 sm:text-sm"
-                    variant="outline"
-                  >
-                    Discharge
-                  </Button>
-                </Link>
-                <Link to="/transinform">
-                  <Button
-                    className="shadow-sm py-2 focus:outline-none focus:border-sky-500 focus:ring-1 sm:text-sm"
-                    variant="outline"
-                  >
-                    Trans In
-                  </Button>
-                </Link>
-                <Link to="/transoutform">
-                  <Button
-                    className="shadow-sm py-2 focus:outline-none focus:border-sky-500 focus:ring-1 sm:text-sm"
-                    variant="outline"
-                  >
-                    Trans Out
-                  </Button>
-                </Link>
-                <Link to="/expiredform">
-                  <Button
-                    className="shadow-sm py-2 focus:outline-none focus:border-sky-500 focus:ring-1 sm:text-sm"
-                    variant="outline"
-                  >
-                    Deaths
-                  </Button>
-                </Link>
-              </div>
-            </div>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="Age">Age</Label>
+            <Input id="Age" placeholder="Enter Age eg. 48" value={Age} onChange={(e) => setAge(e.target.value)} />
           </div>
+          <div className="space-y-2">
+            <Label htmlFor="admission-date">Admission-Date</Label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="outline" className="w-full text-left font-normal">
+                {admissionDate ? admissionDate.toLocaleDateString() : "mm/dd/yyyy"}
+                  <CalendarDaysIcon className="ml-auto h-4 w-4 opacity-50" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar mode="single" selected={admissionDate} onSelect={(date) => setAdmissionDate(date)} />
+              </PopoverContent>
+            </Popover>
+          </div>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="admissionOutcome">Admission Outcome</Label>
+          <Select value={admissionOutcome} onValueChange={(value) => setAdmissionOutcom(value)}>
+            <SelectTrigger id="admissionOutcome">
+              <SelectValue placeholder="Discharge" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="select">select</SelectItem>
+              <SelectItem value="expired">Expired</SelectItem>
+              <SelectItem value="discharged">Discharged</SelectItem>
+              <SelectItem value="transferInDate">Trans-In</SelectItem>
+              <SelectItem value="transferOutDate">Trans-Out</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        {admissionOutcome === "expired" &&(
+          <div className="space-y-2">
+          <Label htmlFor="expiredDate">Expired-Date</Label>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className="w-full text-left font-normal">
+              {expiredDate ? expiredDate.toLocaleDateString() : "mm/dd/yyyy"}
+                <CalendarDaysIcon className="ml-auto h-4 w-4 opacity-50" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar mode="single" selected={expiredDate} onSelect={(date) => setExpiredDate(date)} />
+            </PopoverContent>
+          </Popover>
+        </div>
+        )}
+
+        {admissionOutcome === "discharged" && (
+          <div className="space-y-2">
+          <Label htmlFor="expiredDate">Discharge-Date</Label>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className="w-full text-left font-normal">
+              {dischargedDate ? dischargedDate.toLocaleDateString() : "mm/dd/yyyy"}
+                <CalendarDaysIcon className="ml-auto h-4 w-4 opacity-50" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar mode="single" selected={expiredDate} onSelect={(date) => setDischargedDate(date)} />
+            </PopoverContent>
+          </Popover>
         </div>
 
-        <div className="border-4 border-solid rounded mr-[50px] mt-10">
-          <form
-            onSubmit={handleSubmit}
-            className="ml- mb-10 grid justify-center mt-10"
-          >
-            <label className="mb-2" htmlFor="patientId">
-              Patient-ID
-            </label>
-            <input
-              className="border border-slate-600 rounded text-center w-[400px] mb-3 placeholder:italic placeholder:text-slate-400 block bg-white py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
-              placeholder="Enter Patient ID eg. ER-A06-AAA1234..."
-              type="text"
-              value={patientId}
-              onChange={(e) => setPatientId(e.target.value)}
-              required
-            />
-            <label className="mb-2" htmlFor="patientName">
-              Name
-            </label>
-            <input
-              className="border border-slate-600 rounded text-center w-[400px] mb-3 placeholder:italic placeholder:text-slate-400 block bg-white py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
-              placeholder="Enter Patient Name eg. Samuel Sarpong"
-              value={patientName}
-              onChange={(e) => setPatientName(e.target.value)}
-              required
-            />
-            <div className="flex flex-row">
-              
-              <div className="flex-initial w-30 ">
-                <label className="grid mb-2" htmlFor="nhisStatus">
-                  Insurance-Status
-                </label>
-                <select
-                  value={nhisStatus}
-                  name="nhisStatus"
-                  onChange={(e) => setNhisStatus(e.target.value)}
-                  className="border-collapse border border-slate-600 rounded text-center w-[180px] mb-3 mr-9 shadow-sm py-2 pl-2 focus:outline-none focus:border-sky-500 focus:ring-1 sm:text-sm"
-                >
-                  <option value="Select">Select</option>
-                  <option value="Insured">Insured</option>
-                  <option value="NonInsured">NonInsured</option>
-                </select>
-              </div>
-              <div className="flex">
-                <div className="flex-initial w-30">
-                  <label className="grid mb-2" htmlFor="gender">
-                    Gender
-                  </label>
-                  <select
-                    type="text"
-                    value={gender}
-                    onChange={(e) => setGender(e.target.value)}
-                    className="border-collapse border border-slate-600 rounded text-center w-[180px] shadow-sm py-2 focus:outline-none focus:border-sky-500 focus:ring-1 sm:text-sm"
-                    required
-                  >
-                    <option value="Select">Select</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                  </select>
+        )}
+
+        {admissionOutcome === "transferInDate" &&(
+           <div className="space-y-2">
+           <Label htmlFor="transferInDate">TransIn-Date</Label>
+           <Popover>
+             <PopoverTrigger asChild>
+               <Button variant="outline" className="w-full text-left font-normal">
+               {transferInDate ? transferInDate.toLocaleDateString() : "mm/dd/yyyy"}
+                 <CalendarDaysIcon className="ml-auto h-4 w-4 opacity-50" />
+               </Button>
+             </PopoverTrigger>
+             <PopoverContent className="w-auto p-0" align="start">
+               <Calendar mode="single" selected={transferInDate} onSelect={(date) => setTransferInDate(date)} />
+             </PopoverContent>
+           </Popover>
+         </div>
+ 
+        )}
+
+        {admissionOutcome === "transferOutDate" &&(
+                  <div className="space-y-2">
+                  <Label htmlFor="transferOutDate">transOut-Date</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button variant="outline" className="w-full text-left font-normal">
+                      {transferOutDate ? transferOutDate.toLocaleDateString() : "mm/dd/yyyy"}
+                        <CalendarDaysIcon className="ml-auto h-4 w-4 opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar mode="single" selected={transferOutDate} onSelect={(date) => setTransferOutDate(date)} />
+                    </PopoverContent>
+                  </Popover>
                 </div>
-              </div>
-            </div>
-            <div className="flex flex-row">
-              <div className="flex-initial w-30 mr-10">
-                <label className="grid mb-2" htmlFor="Age">
-                  Age
-                </label>
-                <input
-                  className="border border-slate-600 rounded text-center shadow-sm py-2 mb-5 focus:outline-none focus:border-sky-500 focus:ring-1 sm:text-sm"
-                  placeholder="Enter Age eg. 48"
-                  type="number"
-                  value={Age}
-                  name="Age"
-                  onChange={(e) => setAge(e.target.value)}
-                  required
-                />
-              </div>
-              
-
-              <div className="flex-initial w-30 mr-10">
-                <label className="grid mb-2" htmlFor="admissionDate">
-                  Admission-Date
-                </label>
-                <input
-                  className="border border-slate-600 rounded text-center px-5 shadow-sm py-2 focus:outline-none focus:border-sky-500 focus:ring-1 sm:text-sm"
-                  type="date"
-                  value={admissionDate}
-                  name="admissionDate"
-                  onChange={(e) => setAdmissionDate(e.target.value)}
-                />
-              </div>
-            </div>
-            <div className="flex flex-row">
-              <div className="flex-initial w-30 mr-10">
-                <label className="grid mb-2" htmlFor="transferInDate">
-                  TransIn-Date
-                </label>
-                <input
-                  className="border border-slate-600 rounded text-center px-5 shadow-sm py-2 focus:outline-none focus:border-sky-500 focus:ring-1 sm:text-sm"
-                  type="date"
-                  value={transferInDate}
-                  name="transferInDate"
-                  onChange={(e) => setTransferInDate(e.target.value)}
-                />
-              </div>
-              
-              <div className="flex-initial w-30 mr-10">
-                <label className="grid mb-2" htmlFor="transferOutDate">
-                  TransOut-Date
-                </label>
-                <input
-                  className="border border-slate-600 rounded text-center px-5 shadow-sm py-2 focus:outline-none focus:border-sky-500 focus:ring-1 sm:text-sm"
-                  type="date"
-                  value={transferOutDate}
-                  name="transferOutDate"
-                  onChange={(e) => setTransferOutDate(e.target.value)}
-                />
-              </div>
-              
-            </div>
-              <div className="flex flex-row">
-            <div className="flex-initial w-30 mr-10 ">
-                <label className="grid mb-2 mt-2" htmlFor="dischargeDate">
-                  DischargeDate
-                </label>
-                <input
-                  className="border border-slate-600 rounded text-center px-5 shadow-sm py-2 focus:outline-none focus:border-sky-500 focus:ring-1 sm:text-sm"
-                  type="date"
-                  value={ dischargeDate}
-                  name="dischargeDate"
-                  onChange={(e) => setDischargeDate(e.target.value)}
-                />
-              </div>
-              <div className="flex-initial w-30 mr-10">
-                <label className="grid mb-2 mt-2" htmlFor="expiredDate">
-                  Expired-Date
-                </label>
-                <input
-                  className="border border-slate-600 rounded text-center px-5 shadow-sm py-2 focus:outline-none focus:border-sky-500 focus:ring-1 sm:text-sm"
-                  type="date"
-                  value={expiredDate}
-                  name="expiredDate"
-                  onChange={(e) => setExpiredDate(e.target.value)}
-                />
-              </div>
-              </div>
-            <Button
-              className="shadow-sm py-2 mt-3 focus:outline-none focus:border-sky-500 focus:ring-1 sm:text-sm"
-              type="submit"
-              variant="outline"
-            >
-              Add
+        
+                )}
+        
+      </CardContent>
+      <CardFooter>
+      <Button className="w-full mr-2" onClick={handleSubmit} disabled={loading}>
+          {loading ? "Adding..." : "Add"}
+        </Button>
+        <Button className="bg-red-500 text-white  rounded w-full" variant="danger" onClick={() => navigate("/")}>
+              Cancel
             </Button>
-          </form>
-        </div>
-      </main>
-    </div>
+      </CardFooter>
+    </Card>
   );
-};
+}
 
-export default AddAdmission;
+function CalendarDaysIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M8 2v4" />
+      <path d="M16 2v4" />
+      <rect width="18" height="18" x="3" y="4" rx="2" />
+      <path d="M3 10h18" />
+      <path d="M8 14h.01" />
+      <path d="M12 14h.01" />
+      <path d="M16 14h.01" />
+      <path d="M8 18h.01" />
+      <path d="M12 18h.01" />
+      <path d="M16 18h.01" />
+    </svg>
+  );
+}
+
+function XIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M18 6 6 18" />
+      <path d="m6 6 12 12" />
+    </svg>
+  );
+}
+
+export default AdmissionForm;

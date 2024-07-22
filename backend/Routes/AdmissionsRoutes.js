@@ -6,56 +6,72 @@ import Admission from '../models/Admissionmodel.js';
   const router = express.Router()
 
 // Route for saving a new Admission
+// Route for saving a new Admission
 router.post('/', async (request, response) => {
-try {
-  // Parse date strings into Date objects
-  const { admissionDate, transferInDate, transferOutDate } = request.body;
-  const parsedAdmissionDate = admissionDate ? new Date(admissionDate) : null;
-  const parsedTransferInDate = transferInDate ? new Date(transferInDate) : null;
-  const parsedTransferOutDate = transferOutDate ? new Date(transferOutDate) : null;
-
   const newAdmission = new Admission({
     ...request.body,
-    admissionDate: parsedAdmissionDate,
-    transferInDate: parsedTransferInDate,
-    transferOutDate: parsedTransferOutDate,
+    transferOutDate: request.body.transferOutDate || null,
+    transferInDate: request.body.transferInDate || null,
+    transferInDate: request.body.transferInDate || null,
+    dischargeDate: request.body.dischargeDate || null,
+    expiredDate: request.body.expiredDate || null,
   });
-
-  // Update status based on transfer dates
-  if (parsedTransferOutDate) {
-    newAdmission.status = 'TransferedOut';
-    console.log('Status set to TransferedOut');
-  }
-
-  if (parsedTransferInDate) {
-    newAdmission.status = 'TransferIn';
-    console.log('Status set to TransferIn');
-  }
-
-  // Transfer validation
-  const errors = [];
-  if (parsedTransferInDate && parsedAdmissionDate) {
-    if (parsedTransferInDate < parsedAdmissionDate) {
-      errors.push('Transfer In Date cannot be before Admission Date');
-    }
-  }
-  if (parsedTransferOutDate && parsedAdmissionDate) {
-    if (parsedTransferOutDate < parsedAdmissionDate) {
-      errors.push('Transfer Out Date cannot be before Admission Date');
-    }
-  }
-
-  if (errors.length > 0) {
-    return response.status(400).json({ message: 'Validation errors', errors });
-  }
-
-  const savedAdmission = await newAdmission.save();
-  response.status(201).json({ message: 'Admission successful!', admission: savedAdmission });
-} catch (error) {
-  console.log(error.message);
-  response.status(500).json({ message: 'Error saving admission' });
+  
+  // Update status based on transfer dates (optional)
+if (newAdmission.transferOutDate) {
+  newAdmission.status = 'TransferedOut';
 }
+else if(newAdmission.transferInDate){
+  newAdmission.status = 'TransferIn'
+}
+else if(newAdmission.dischargeDate){
+  newAdmission.status = 'dischargeDate'
+}
+else{
+  newAdmission.status = 'Expired'
+}
+// Transfer validation
+const errors = [];
+if (newAdmission.transferInDate && newAdmission.admissionDate) {
+  if (newAdmission.transferInDate < newAdmission.admissionDate) {
+ errors.push('Transfer In Date cannot before Admission Date');
+  }
+}
+if (newAdmission.transferOutDate && newAdmission.admissionDate) {
+  if (newAdmission.transferOutDate < newAdmission.admissionDate) {
+    errors.push('Transfer Out Date cannot be before Admission Date');
+  }
+}
+
+
+
+if (errors.length > 0) {
+  return response.status(400).json({ message: 'Validation errors', errors });
+}
+
+  try {
+    const savedAdmission = await newAdmission.save();
+        response.status(201).json({ message: 'Admission successful!', admission: savedAdmission });
+   
+  } catch (error) {
+      console.log(error.message);
+      response.status(500).json({ message: 'Error saving admission' });
+  }
 });
+
+//this two are different
+//route for getting all admissions
+router.get('/', async (request,response) =>{
+  try {
+    const admissions = await Admission.find()
+    response.json(admissions)
+    
+  } catch (error) {
+    console.error(error)
+    response.status(500).json({message:'error retriving admissions'})
+    
+  }
+})
 
 //this two are different
 //route for getting all admissions
