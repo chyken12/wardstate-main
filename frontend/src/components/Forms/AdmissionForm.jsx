@@ -25,6 +25,7 @@ import { Calendar } from "@/components/ui/calendar";
   const [transferOutDate, setTransferOutDate] = useState("");
   const [dischargedDate,setDischargedDate] = useState('')
   const [error, setError] = useState(null);
+  const [ward,setWard] = useState('');
   const navigate = useNavigate();
 
   
@@ -32,7 +33,7 @@ import { Calendar } from "@/components/ui/calendar";
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (!patientName || !patientId || !Age || !gender  || !admissionDate) {
+    if (!patientName || !patientId || !Age || !gender  || !admissionDate || !ward) {
       setError("All fields are required.");
       
       return;
@@ -79,6 +80,27 @@ import { Calendar } from "@/components/ui/calendar";
         <CardTitle>Patient Information</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
+      <div className="space-y-2">
+          <Label htmlFor="ward">Ward</Label>
+          <Select value={ward} onValueChange={(value) => setWard(value)}>
+            <SelectTrigger id="ward">
+              <SelectValue placeholder="Select Ward" />
+            </SelectTrigger>
+            <SelectContent>
+              
+                <SelectItem value='Male Mediacal' >Male Medical </SelectItem>
+                <SelectItem value='Female Medical'>FeMale Medical </SelectItem>
+                <SelectItem value='Male Surgical '>Male Surgical </SelectItem>
+                <SelectItem value='Female Surgical'>Feale Surgical </SelectItem>
+                <SelectItem value="Maternity">Maternity  </SelectItem>
+                <SelectItem value="NICU">NICU  </SelectItem>
+                <SelectItem value="Kids Ward">KIDS Ward </SelectItem>
+                
+
+           
+            </SelectContent>
+          </Select>
+        </div>
         <div className="space-y-2">
           <Label htmlFor="patient-id">Patient-ID</Label>
           <Input id="patient-id" placeholder="Enter Patient ID eg. ER-A06-AAA1234..." value={patientId} onChange={(e) => setPatientId(e.target.value)} />

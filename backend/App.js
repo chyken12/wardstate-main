@@ -9,6 +9,8 @@ import DischargesRoutes from './Routes/DischargesRoutes.js'
 import  ExpiredRoutes from './Routes/ExpiredRoutes.js'
 import transInRoutes from './Routes/transInRoutes.js'
 import transOutRoutes  from './Routes/transOutRoutes.js'
+import AdmissionbyWard from './Routes/AdmissionbyWardRoutes.js'
+
 
 const app = express()
 app.use(express.json())
@@ -24,6 +26,7 @@ app.use('/api/discharges',DischargesRoutes)
 app.use('/api/expired', ExpiredRoutes)
 app.use('/api/transin',transInRoutes)
 app.use('/api/transout',transOutRoutes)
+app.use('/api/admissionbyward',AdmissionbyWard)
 
 mongoose
 .connect(mongoDBURL)

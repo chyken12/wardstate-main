@@ -46,6 +46,11 @@ expiredDate: {
 transferOutDate: {
     type: Date
 },
+ward: {
+  type: String,
+  enum: ['Male Medical', 'Female Medical','Male Surgical','Female Surgical','NICU','Maternity','Kids Ward'],
+  
+},
 transferringWard: {
     type: String
 }
