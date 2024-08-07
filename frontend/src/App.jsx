@@ -6,6 +6,7 @@ import AllAdmissions from "./components/Pages/AllAdmissions";
 import AllTransIn from "./components/Pages/AllTransIn";
 import AllTransOut from "./components/Pages/AllTransOut";
 import AllExpired from "./components/Pages/AllExpired";
+import WardAdmissions from "./components/Pages/AlladmissionsByWard";
 
 import ExpiredForm from "./components/Forms/ExpiredForm";
 import DischargeForm from "./components/Forms/DischargeForm";
@@ -31,6 +32,7 @@ function App() {
       <Route path='/all-transin' element={<AllTransIn/>} /> 
       <Route path='/all-transout' element={<AllTransOut/>} /> 
       <Route path='/all-expired' element={<AllExpired/>} /> 
+      <Route path='/admission-by-ward' element={<WardAdmissions/>} /> 
     </Routes>
   );
 }
