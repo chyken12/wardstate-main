@@ -23,7 +23,7 @@ import { Calendar } from "@/components/ui/calendar";
   const [admissionOutcome,setAdmissionOutcom] = useState("Admitted")
   const [transferInDate, setTransferInDate] = useState("");
   const [transferOutDate, setTransferOutDate] = useState("");
-  const [dischargedDate,setDischargedDate] = useState('')
+  const [dischargeDate,setDischargedDate] = useState('')
   const [error, setError] = useState(null);
   const [ward,setWard] = useState('');
   const navigate = useNavigate();
@@ -48,6 +48,11 @@ import { Calendar } from "@/components/ui/calendar";
       nhisStatus,
       admissionDate,
       expiredDate,
+      admissionOutcome,
+      transferInDate,
+      dischargeDate,
+      transferOutDate,
+      transferOutDate
     };
 
    
@@ -164,14 +169,14 @@ import { Calendar } from "@/components/ui/calendar";
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="select">select</SelectItem>
-              <SelectItem value="expired">Expired</SelectItem>
-              <SelectItem value="discharged">Discharged</SelectItem>
-              <SelectItem value="transferInDate">Trans-In</SelectItem>
-              <SelectItem value="transferOutDate">Trans-Out</SelectItem>
+              <SelectItem value="Expired">Expired</SelectItem>
+              <SelectItem value="Discharged">Discharged</SelectItem>
+              <SelectItem value="TransferInDate">Trans-In</SelectItem>
+              <SelectItem value="TransferOutDate">Trans-Out</SelectItem>
             </SelectContent>
           </Select>
         </div>
-        {admissionOutcome === "expired" &&(
+        {admissionOutcome === "Expired" &&(
           <div className="space-y-2">
           <Label htmlFor="expiredDate">Expired-Date</Label>
           <Popover>
@@ -188,25 +193,25 @@ import { Calendar } from "@/components/ui/calendar";
         </div>
         )}
 
-        {admissionOutcome === "discharged" && (
+        {admissionOutcome === "Discharged" && (
           <div className="space-y-2">
-          <Label htmlFor="expiredDate">Discharge-Date</Label>
+          <Label htmlFor="dischargedDate">Discharge-Date</Label>
           <Popover>
             <PopoverTrigger asChild>
               <Button variant="outline" className="w-full text-left font-normal">
-              {dischargedDate ? dischargedDate.toLocaleDateString() : "mm/dd/yyyy"}
+              {dischargeDate ? dischargeDate.toLocaleDateString() : "mm/dd/yyyy"}
                 <CalendarDaysIcon className="ml-auto h-4 w-4 opacity-50" />
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
-              <Calendar mode="single" selected={expiredDate} onSelect={(date) => setDischargedDate(date)} />
+              <Calendar mode="single" selected={dischargeDate} onSelect={(date) => setDischargedDate(date)} />
             </PopoverContent>
           </Popover>
         </div>
 
         )}
 
-        {admissionOutcome === "transferInDate" &&(
+        {admissionOutcome === "TransferInDate" &&(
            <div className="space-y-2">
            <Label htmlFor="transferInDate">TransIn-Date</Label>
            <Popover>
@@ -224,7 +229,7 @@ import { Calendar } from "@/components/ui/calendar";
  
         )}
 
-        {admissionOutcome === "transferOutDate" &&(
+        {admissionOutcome === "TransferOutDate" &&(
                   <div className="space-y-2">
                   <Label htmlFor="transferOutDate">transOut-Date</Label>
                   <Popover>

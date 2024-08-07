@@ -25,7 +25,7 @@ else if(newAdmission.transferInDate){
   newAdmission.status = 'TransferIn'
 }
 else if(newAdmission.dischargeDate){
-  newAdmission.status = 'dischargeDate'
+  newAdmission.status = 'Discharged'
 }
 else{
   newAdmission.status = 'Expired'
