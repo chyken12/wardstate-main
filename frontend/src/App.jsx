@@ -13,6 +13,8 @@ import DischargeForm from "./components/Forms/DischargeForm";
 import AdmissionForm from "./components/Forms/AdmissionForm";
 import TransInform from "./components/Forms/TransInForm";
 import TransOutform from "./components/Forms/TransOutForm";
+import LoginForm from "./components/Forms/LoginForm";
+import SignUpForm from "./components/Forms/SignUpForm";
 
 
 
@@ -25,6 +27,8 @@ function App() {
       <Route path='/expiredform' element={<ExpiredForm/>} />
       <Route path='/transinform' element={<TransInform/>} />
       <Route path='/transoutform' element={<TransOutform/>} />
+      <Route path='/login' element={<LoginForm/>} /> 
+      <Route path='/signup' element={<SignUpForm/>} /> 
       
 
       <Route path='/all-admissions' element={<AllAdmissions/>} /> 
@@ -32,7 +36,8 @@ function App() {
       <Route path='/all-transin' element={<AllTransIn/>} /> 
       <Route path='/all-transout' element={<AllTransOut/>} /> 
       <Route path='/all-expired' element={<AllExpired/>} /> 
-      <Route path='/admission-by-ward' element={<WardAdmissions/>} /> 
+      <Route path='/admission-by-ward' element={<WardAdmissions/>} />
+     
     </Routes>
   );
 }

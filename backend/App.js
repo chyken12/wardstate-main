@@ -10,7 +10,7 @@ import  ExpiredRoutes from './Routes/ExpiredRoutes.js'
 import transInRoutes from './Routes/transInRoutes.js'
 import transOutRoutes  from './Routes/transOutRoutes.js'
 import AdmissionbyWard from './Routes/AdmissionbyWardRoutes.js'
-import SignUp_Get from './Routes/SignUp_Get.js';
+import AuthRoutes from './Routes/AuthRoutes.js'
 
 
 const app = express()
@@ -28,10 +28,8 @@ app.use('/api/expired', ExpiredRoutes)
 app.use('/api/transin',transInRoutes)
 app.use('/api/transout',transOutRoutes)
 app.use('/api/admissionbyward',AdmissionbyWard)
-app.use('/api/sigup_get', SignUp_Get)
-app.use('/api/sigup_post', SignUp_Post)
-app.use('/api/login_get', Login_Get)
-app.use('/api/login_post', Login_Post)
+app.use('/api/authentication', AuthRoutes)
+
 
 mongoose
 .connect(mongoDBURL)
