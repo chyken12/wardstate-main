@@ -2,7 +2,6 @@
 import express, { request, response } from 'express'
 import Admission from '../models/Admissionmodel.js';
 
-
   const router = express.Router()
 
 // Route for saving a new Admission

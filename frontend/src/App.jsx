@@ -1,4 +1,6 @@
-import { Routes,Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; // Don't forget to import the CSS for the toast notifications
 
 import Home from "./components/Pages/Home";
 import AllDischarges from "./components/Pages/AllDischarges";
@@ -16,29 +18,28 @@ import TransOutform from "./components/Forms/TransOutForm";
 import LoginForm from "./components/Forms/LoginForm";
 import SignUpForm from "./components/Forms/SignUpForm";
 
-
-
 function App() {
   return (
-    <Routes>
-      <Route path='/' element={<Home/>} /> 
-      <Route path='/admissionform' element={<AdmissionForm/>} />
-      <Route path='/dischargeform' element={<DischargeForm/>} />
-      <Route path='/expiredform' element={<ExpiredForm/>} />
-      <Route path='/transinform' element={<TransInform/>} />
-      <Route path='/transoutform' element={<TransOutform/>} />
-      <Route path='/login' element={<LoginForm/>} /> 
-      <Route path='/signup' element={<SignUpForm/>} /> 
-      
+    <div>
+      <ToastContainer /> {/* This can be anywhere in your component tree */}
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/admissionform' element={<AdmissionForm />} />
+        <Route path='/dischargeform' element={<DischargeForm />} />
+        <Route path='/expiredform' element={<ExpiredForm />} />
+        <Route path='/transinform' element={<TransInform />} />
+        <Route path='/transoutform' element={<TransOutform />} />
+        <Route path='/login' element={<LoginForm />} />
+        <Route path='/signup' element={<SignUpForm />} />
 
-      <Route path='/all-admissions' element={<AllAdmissions/>} /> 
-      <Route path='/all-discharges' element={<AllDischarges/>} /> 
-      <Route path='/all-transin' element={<AllTransIn/>} /> 
-      <Route path='/all-transout' element={<AllTransOut/>} /> 
-      <Route path='/all-expired' element={<AllExpired/>} /> 
-      <Route path='/admission-by-ward' element={<WardAdmissions/>} />
-     
-    </Routes>
+        <Route path='/all-admissions' element={<AllAdmissions />} />
+        <Route path='/all-discharges' element={<AllDischarges />} />
+        <Route path='/all-transin' element={<AllTransIn />} />
+        <Route path='/all-transout' element={<AllTransOut />} />
+        <Route path='/all-expired' element={<AllExpired />} />
+        <Route path='/admission-by-ward' element={<WardAdmissions />} />
+      </Routes>
+    </div>
   );
 }
 

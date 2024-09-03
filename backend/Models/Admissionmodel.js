@@ -8,7 +8,11 @@ const admissionSchema = new mongoose.Schema(
   },
   patientId: {
     type: String,
-    required: true
+    required: true,
+    match: [
+      /^er-[a-z0-9]{3}-[a-z]{3}\d{4}$/i, // 'i' flag makes the regex case-insensitive
+      'Password must be in the format ER-A06-ABC1235, with "er-" (case-insensitive), a letter or digit, two digits, a hyphen, and four digits.',
+    ],
 },
   Age: {
     type: Number,
