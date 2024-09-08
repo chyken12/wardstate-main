@@ -7,20 +7,28 @@ import 'react-toastify/dist/ReactToastify.css';
 function SignUpForm() {
   const [formData, setFormData] = useState({
     username: '',
-    password: ''
+    password: '',
+    confirmpassword:''
+    
   });
-  const [passwordConfirm, setPasswordConfirm] = useState('');
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    setPasswordConfirm({...passwordConfirm,[e.target.name]:e.target.value})
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if(formData.password !== formData.confirmpassword){
+      toast.error('Passwords donot match ');
+      return
+    }
     try {
-      const response = await axios.post('http://localhost:8000/api/signup', formData);
-      toast.success('Login successful!');
-      // Handle successful login (e.g., save token, redirect)
+      const response = await axios.post('http://localhost:8000/api/signup', {
+        username: formData.username,
+        password: formData.password
+      });
+      toast.success('SignUp successful!');
+      // Handle successful signup(e.g., save token, redirect)
     } catch (error) {
       if (error.response) {
         // The request was made and the server responded with a status code
@@ -39,22 +47,39 @@ function SignUpForm() {
   return (
     <div className="w-full max-w-md mx-auto p-4">
     <h1 className="text-3xl font-title mb-6">Sign Up</h1>
-    <form className="space-y-4">
+    <form className="space-y-4" onSubmit={handleSubmit}>
       <div>
         <label className="block text-sm font-medium mb-2" htmlFor="username">Username</label>
-        <input className="w-full px-4 py-2 border rounded-md" type="text" id="username" name="username" />
+        <input className="w-full px-4 py-2 border rounded-md"
+         type="text" 
+         id="username" 
+         name="username"
+         value={formData.username}
+         onChange={handleChange}
+          />
       </div>
-      <div>
+      {/* <div>
         <label className="block text-sm font-medium mb-2" htmlFor="email">Email</label>
         <input className="w-full px-4 py-2 border rounded-md" type="email" id="email" name="email" />
-      </div>
+      </div> */}
       <div>
         <label className="block text-sm font-medium mb-2" htmlFor="password">Password</label>
-        <input className="w-full px-4 py-2 border rounded-md" type="password" id="password" name="password" />
+        <input className="w-full px-4 py-2 border rounded-md"
+         type="password" 
+         id="password" 
+         name="password"
+         value={formData.password}
+         onChange={handleChange} 
+         />
       </div>
       <div>
         <label className="block text-sm font-medium mb-2" htmlFor="password"> Confirm Password</label>
-        <input className="w-full px-4 py-2 border rounded-md" type="password" id="password" name="password" />
+        <input className="w-full px-4 py-2 border rounded-md" 
+        type="password" 
+        id="confirmpassword" 
+        name="confirmpassword" 
+        value={formData.confirmpassword}
+        />
       </div>
       <button className="w-full py-3 bg-primary text-white font-medium rounded-md">Sign Up</button>
     </form>
