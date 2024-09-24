@@ -1,7 +1,7 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import User from "../Models/Usermodel.js"
+import { User, Ward } from "../Models/Usermodel.js"
 
 const router = express.Router();
 const secretKey = 'process.env.secretKey'; 
@@ -15,11 +15,11 @@ router.use(express.json());
 // POST /login
 router.post('/login', async (req, res) => {
   try {
-    const { userName, password } = req.body;
+    const { username, password } = req.body;
 
     
 
-    const user = await User.findOne({ userName });
+    const user = await User.findOne({ username });
 
     
     const isValidPassword = bcrypt.compare(password, user.password);
@@ -41,34 +41,64 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// POST /signup
-router.post('/signup', async (req, res) => {
+router.get('/wards', async (req, res) => {
   try {
-    const {userName, password } = req.body;
-
-   
-
-    const existingUser= await User.findOne({userName });
-
-  
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const newUser = new User({userName, password: hashedPassword });
-
-    await newUser.save();
-
-    res.json({ message: 'Signup successful' });
-  }  catch (error) {
-    if (error.name === 'ValidationError') {
-      const errors = {};
-      Object.keys(error.errors).forEach((key) => {
-        errors[key] = error.errors[key].message;
-      });
-      return res.status(400).json({ errors });
-    }
-    res.status(500).json({ message: 'Server error' });
+    const wards = await Ward.find(); // Fetch all wards from the database
+    res.json(wards);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error while fetching wards' });
   }
 });
 
+
+
+// POST /signup
+router.post('/signup', async (req, res) => {
+  try {
+    const { username, password, wardName } = req.body;
+
+    // Password validation
+    if (password.length < 6) {
+      return res.status(400).json({ errors: { password: 'Password should be at least 6 characters' } });
+    }
+    if (password.length > 30) {
+      return res.status(400).json({ errors: { password: 'Password cannot exceed 30 characters' } });
+    }
+
+    // Check if user already exists
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+      return res.status(400).json({ errors: { username: 'Username already exists' } });
+    }
+
+     // Find the ward by name
+     const ward = await Ward.findOne({ name: wardName });
+     if (!ward) {
+       return res.status(400).json({ error: 'Ward not found' });
+     }
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+
+const newUser = new User({
+  username,
+  password: hashedPassword,
+  wards: ward._id // Pass the ward ID to the new User
+});
+
+await newUser.save();
+
+return res.status(201).json({ message: 'User registered successfully' });
+} catch (error) {
+console.error('signup error:', error);
+return res.status(500).json({ message: 'Server error', error: error.message  });
+}
+});
 export default router;
+
+
+
+
+
