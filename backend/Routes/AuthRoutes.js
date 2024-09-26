@@ -73,9 +73,10 @@ router.post('/signup', async (req, res) => {
     }
 
      // Find the ward by name
-     const ward = await Ward.findOne({ name: wardName });
+    let ward = await Ward.findOne({ name: wardName });
      if (!ward) {
-       return res.status(400).json({ error: 'Ward not found' });
+      ward = new Ward({ name: wardName });
+      await ward.save();
      }
 
     // Hash the password
@@ -85,7 +86,7 @@ router.post('/signup', async (req, res) => {
 const newUser = new User({
   username,
   password: hashedPassword,
-  wards: ward._id // Pass the ward ID to the new User
+  ward: ward._id // Pass the ward ID to the new User
 });
 
 await newUser.save();
