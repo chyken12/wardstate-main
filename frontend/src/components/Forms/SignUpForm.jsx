@@ -4,9 +4,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import React, { useState, useEffect } from 'react';
 import { Label } from "@/components/ui/label";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
-
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function SignUpForm() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -44,6 +46,8 @@ function SignUpForm() {
       ...formData,
       wardName: selectedWard 
     };
+
+   
     // Regular expression to allow only letters, numbers, dots, underscores, and hyphens
   const usernameRegex = /^[a-zA-Z0-9._-]+$/;
 
@@ -58,9 +62,14 @@ function SignUpForm() {
     }
     try {
       const response = await axios.post('http://localhost:8000/api/auth/signup', body);
-      console.log('Signup successful:', response.data);
+    
+       // Handle successful signup(e.g., save token, redirect)
       toast.success('SignUp successful!');
-      // Handle successful signup(e.g., save token, redirect)
+       // Redirect to login page after a short delay (e.g., 2 seconds)
+       setTimeout(() => {
+        navigate('/login');  // Replace '/login' with your actual login route
+      }, 2000);
+     
     } catch (error) {
       toast.error(error.response.data.message);
       if (error.response) {
@@ -121,10 +130,10 @@ function SignUpForm() {
               <SelectValue placeholder="Select Ward" />
             </SelectTrigger>
             <SelectContent>
-                <SelectItem value='Male Mediacal' >Male Medical </SelectItem>
-                <SelectItem value='Female Medical'>FeMale Medical </SelectItem>
-                <SelectItem value='Male Surgical '>Male Surgical </SelectItem>
-                <SelectItem value='Female Surgical'>Feale Surgical </SelectItem>
+                <SelectItem value='Male Medical' >Male Medical</SelectItem>
+                <SelectItem value='Female Medical'>Female Medical</SelectItem>
+                <SelectItem value='Male Surgical'>Male Surgical</SelectItem>
+                <SelectItem value='Female Surgical'>Female Surgical</SelectItem>
                 <SelectItem value="Maternity">Maternity  </SelectItem>
                 <SelectItem value="NICU">NICU  </SelectItem>
                 <SelectItem value="Kids Ward">KIDS Ward </SelectItem>
@@ -134,9 +143,12 @@ function SignUpForm() {
 
       <button className="w-full py-3 bg-primary text-white font-medium rounded-md">Sign Up</button>
     </form>
+    <Link to="/login">
     <p className="mt-4 text-sm">
       Already have an account? <a href="#" className="text-primary font-medium">Login here</a>
     </p>
+    </Link>
+    
     <ToastContainer />
   </div>
   )

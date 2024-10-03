@@ -4,7 +4,7 @@ import Admission from '../models/Admissionmodel.js';
 
   const router = express.Router()
 
-// Route for saving a new Admission
+
 // Route for saving a new Admission
 router.post('/', async (request, response) => {
   const newAdmission = new Admission({
@@ -53,13 +53,13 @@ if (errors.length > 0) {
         response.status(201).json({ message: 'Admission successful!', admission: savedAdmission });
    
   } catch (error) {
-      console.log(error.message);
+      
       response.status(500).json({ message: 'Error saving admission' });
   }
 });
 
-//this two are different
-//route for getting all admissions
+// this two are different
+// route for getting all admissions
 router.get('/', async (request,response) =>{
   try {
     const admissions = await Admission.find()
@@ -71,6 +71,33 @@ router.get('/', async (request,response) =>{
     
   }
 })
+
+
+// Fetch admissions for a specific ward
+router.get('/ward/:wardType', async (req, res) => {
+  try {
+    // Decode the wardType to handle spaces (and other URL-encoded characters)
+    const wardType = decodeURIComponent(req.params.wardType);
+    console.log('Ward type from route:', wardType); // Log the requested ward type
+    const admissions = await Admission.find({ ward: new RegExp(`^${wardType}$`, 'i') });
+    console.log('Admissions found:', admissions); // Log the found admissions
+    res.json(admissions);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
 
 //this two are different
 //route for getting all admissions

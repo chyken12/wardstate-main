@@ -1,34 +1,66 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Eye, EyeOff } from 'lucide-react';
 
 function LoginForm() {
   const [formData, setFormData] = useState({
     username: '',
     password: ''
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8000/api/login', formData);
-      toast.success('Login successful!');
-      // Handle successful login (e.g., save token, redirect)
+      const response = await axios.post('http://localhost:8000/api/auth/login', formData);
+      
+      if (response.data && response.data.token && response.data.user) {
+        toast.success('Login successful!');
+        const { token, user } = response.data;
+       
+
+        localStorage.setItem('authToken', token);
+        
+        const wardRoutes = {
+          'Male Medical': '/ward/Male Medical',
+          'Female Medical': '/ward/Female Medical',
+          'Male Surgical': '/ward/Male Surgical',
+          'Female Surgical': '/ward/Female Surgical',
+          'NICU': '/ward/NICU',
+          'Maternity': '/ward/Maternity',
+          'Kids Ward': '/ward/Kids Ward'
+        };
+
+        const route = wardRoutes[user.ward.type] || '/ward/unknown';
+        if (route === '/ward/unknown') {
+          toast.error(`Unknown or invalid ward: ${user.ward}. Please contact support.`);
+        }
+        navigate(route);
+      } else {
+        toast.error('Invalid response format from server');
+      }
     } catch (error) {
       if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        toast.error(error.response.data.message || 'An error occurred');
+        if (error.response.data.message === 'Invalid password') {
+          toast.error('Invalid password. Please try again.');
+        } else {
+          toast.error(error.response.data.message || 'An error occurred during login');
+        }
       } else if (error.request) {
-        // The request was made but no response was received
-        toast.error('No response from server. Please try again.');
+        toast.error('No response from server. Please check your connection and try again.');
       } else {
-        // Something happened in setting up the request that triggered an Error
         toast.error('An error occurred. Please try again.');
       }
     }
@@ -47,18 +79,28 @@ function LoginForm() {
             name="username" 
             value={formData.username}
             onChange={handleChange}
+            required
           />
         </div>
-        <div>
+        <div className="relative">
           <label className="block text-sm font-medium mb-2" htmlFor="password">Password</label>
           <input 
-            className="w-full px-4 py-2 border rounded-md" 
-            type="password" 
+            className="w-full px-4 py-2 border rounded-md pr-10" 
+            type={showPassword ? "text" : "password"}
             id="password" 
             name="password" 
             value={formData.password}
             onChange={handleChange}
+            required
+            minLength="8"
           />
+          <button 
+            type="button"
+            className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 mt-6"
+            onClick={togglePasswordVisibility}
+          >
+            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+          </button>
         </div>
         <button className="w-full py-3 bg-primary text-white font-medium rounded-md">Sign In</button>
       </form>

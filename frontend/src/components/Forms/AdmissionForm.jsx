@@ -28,7 +28,9 @@ import { Calendar } from "@/components/ui/calendar";
   const [ward,setWard] = useState('');
   const navigate = useNavigate();
 
-  
+  const formatDate = (date) => {
+    return date instanceof Date ? date.toISOString().split('T')[0] : date;
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -46,13 +48,13 @@ import { Calendar } from "@/components/ui/calendar";
       Age: Number(Age),
       gender,
       nhisStatus,
-      admissionDate,
-      expiredDate,
+      ward,
+      admissionDate: formatDate(admissionDate),
+      expiredDate: formatDate(expiredDate),
       admissionOutcome,
-      transferInDate,
-      dischargeDate,
-      transferOutDate,
-      transferOutDate
+      transferInDate: formatDate(transferInDate),
+      dischargeDate: formatDate(dischargeDate),
+      transferOutDate: formatDate(transferOutDate)
     };
 
    
@@ -68,8 +70,7 @@ import { Calendar } from "@/components/ui/calendar";
         setLoading(false);
         const errorMsg = error.response?.data?.message || error.message;
         setError(errorMsg);
-        console.error("Submission error: ", errorMsg);
-        console.error("Error details: ", error.response?.data || error);
+        
       });
   };
   if (loading) {
@@ -93,10 +94,10 @@ import { Calendar } from "@/components/ui/calendar";
             </SelectTrigger>
             <SelectContent>
               
-                <SelectItem value='Male Mediacal' >Male Medical </SelectItem>
-                <SelectItem value='Female Medical'>FeMale Medical </SelectItem>
-                <SelectItem value='Male Surgical '>Male Surgical </SelectItem>
-                <SelectItem value='Female Surgical'>Feale Surgical </SelectItem>
+                <SelectItem value='Male Medical' >Male Medical </SelectItem>
+                <SelectItem value='Female Medical'>Female Medical </SelectItem>
+                <SelectItem value='Male Surgical'>Male Surgical </SelectItem>
+                <SelectItem value='Female Surgical'>Female Surgical </SelectItem>
                 <SelectItem value="Maternity">Maternity  </SelectItem>
                 <SelectItem value="NICU">NICU  </SelectItem>
                 <SelectItem value="Kids Ward">KIDS Ward </SelectItem>

@@ -1,18 +1,20 @@
 import mongoose from "mongoose";
-import bcrypt from "bcryptjs"
+import bcrypt from "bcryptjs";
 
 const WardSchema = new mongoose.Schema({
-  type: String,
-  enum: [
-    "Male Medical",
-    "Female Medical",
-    "Male Surgical",
-    "Female Surgical",
-    "NICU",
-    "Maternity",
-    "Kids Ward",
-  ],
-  // required: [true, 'Please select a ward']
+  type: {
+    type: String,
+    enum: [
+      "Male Medical",
+      "Female Medical",
+      "Male Surgical",
+      "Female Surgical",
+      "NICU",
+      "Maternity",
+      "Kids Ward",
+    ],
+    required: [true, 'Please select a ward'] // Ensure the ward is required
+  }
 });
 
 const Ward = mongoose.model("Ward", WardSchema);
@@ -44,28 +46,25 @@ const UserSchema = new mongoose.Schema({
   role: { type: String, enum: ["user", "admin"], default: "user" }, // Roles
 });
 
-// Password Hashing Middleware
+// Consolidated Password Hashing and Username Validation Middleware
 UserSchema.pre("save", async function (next) {
   if (this.isModified("password")) {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
+    
   }
   next();
-});
-// Add a pre-save hook to ensure username is never null
-UserSchema.pre("save", function (next) {
-  if (this.username === null) {
-    next(new Error("Username cannot be null"));
-  } else {
-    next();
-  }
 });
 
 // Compare Passwords Method
 UserSchema.methods.comparePassword = async function(enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password);
+  
+  const match = await bcrypt.compare(enteredPassword, this.password);
+  
+  return match;
 };
+
 
 const User = mongoose.model("User", UserSchema);
 
-export  { User, Ward };
+export { User, Ward };

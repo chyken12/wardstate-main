@@ -10,8 +10,8 @@ import DischargesRoutes from './Routes/DischargesRoutes.js'
 import  ExpiredRoutes from './Routes/ExpiredRoutes.js'
 import transInRoutes from './Routes/transInRoutes.js'
 import transOutRoutes  from './Routes/transOutRoutes.js'
-import AdmissionbyWard from './Routes/AdmissionbyWardRoutes.js'
 import AuthRoutes from './Routes/AuthRoutes.js'
+
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -19,6 +19,7 @@ dotenv.config();
 
 const app = express()
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: 'http://localhost:5173' }))
 
 
@@ -31,15 +32,14 @@ app.use('/api/discharges',DischargesRoutes)
 app.use('/api/expired', ExpiredRoutes)
 app.use('/api/transin',transInRoutes)
 app.use('/api/transout',transOutRoutes)
-app.use('/api/admissionbyward',AdmissionbyWard)
 app.use('/api/auth', AuthRoutes)
+
 
 
 mongoose
 .connect(process.env.mongoDBURL)
 .then(() => {
   console.log('App connected to DB')
-  console.log('eer')
   app.listen(PORT, () => {
     console.log(`server running on port ${PORT}` )
   } )

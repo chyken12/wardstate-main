@@ -79,30 +79,7 @@ const filteredData = admissionData.filter((admission) => {
             </div>
             <div />
           </div>
-
-          {/* <Table>
-            <TableCaption>A list of all admissions.</TableCaption>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[100px]">PatientID</TableHead>
-                <TableHead>NHIS-Status</TableHead>
-                <TableHead>Patient-Name</TableHead>
-                <TableHead className="text-right">Admission-Outcome</TableHead>
-              </TableRow >
-            </TableHeader>
-            <TableBody>
-            {filteredData.map((admission,index) => (
-                <TableRow key={index}>
-                  <TableCell className="font-medium">{admission.patientId}</TableCell>
-                  <TableCell>{admission.nhisStatus}</TableCell>
-                  <TableCell>{admission.patientName}</TableCell>
-                  <TableCell className="text-right">{admission.status}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table> */}
               <div class="flex">
-  
   <div class="w-1/5 bg-zinc-200 p-4">
     <h2 class="text-lg font-bold mb-4">Quick Links</h2>
     <ul class="space-y-2">
@@ -115,14 +92,10 @@ const filteredData = admissionData.filter((admission) => {
       <li><a href="#" class="text-blue-600">View Alerts</a></li>
       <li><a href="#" class="text-blue-600">Add New Appointment</a></li>
       <li><a href="#" class="text-blue-600">View Action Plan</a></li>
-     
     </ul>
     <Link to="/admissionform"><button class="mt-4 bg-orange-500 text-white py-2 px-4 rounded">ADD EVENT</button></Link>
-    
   </div>
-  
   <div class="w-4/5 p-4">
-    
     <div class="flex space-x-2 mb-4">
       <select class="border p-2 rounded">
         <option>All Doctor</option>
@@ -186,11 +159,6 @@ const filteredData = admissionData.filter((admission) => {
              </td>
            </tr>
           ))}
-         
-         
-         
-        
-       
         </tbody>
       </table>
     </div>
@@ -203,3 +171,4 @@ const filteredData = admissionData.filter((admission) => {
 };
 
 export default AllAdmissions;
+
