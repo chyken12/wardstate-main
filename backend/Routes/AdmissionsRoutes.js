@@ -1,6 +1,6 @@
 
 import express, { request, response } from 'express'
-import Admission from '../models/Admissionmodel.js';
+import Admission from '../Models/Admissionmodel.js';
 
   const router = express.Router()
 

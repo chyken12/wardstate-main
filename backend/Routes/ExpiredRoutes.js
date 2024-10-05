@@ -1,6 +1,6 @@
 import express, { request, response } from 'express'
 const router = express.Router()
-import Admission from '../models/Admissionmodel.js';
+import Admission from '../Models/Admissionmodel.js';
 
 
 //expired donot have a post request because the add event form has a field for admissionoutcome
