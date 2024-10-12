@@ -11,6 +11,7 @@ const useAdmissionData = () => {
   const [allTransOutData, setAllTransOutData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [wardMetrics, setWardMetrics] = useState({});
 
   const fetchAdmissionData = async () => {
     try {
@@ -194,15 +195,6 @@ const useAdmissionData = () => {
     }
   };
 
- 
-
- 
-
- 
-
- 
-
-
   
 
   useEffect(() => {
@@ -211,12 +203,14 @@ const useAdmissionData = () => {
     fetchAllExpired()
     fetchTransInData()
     fetchTransOutData()
+   
     
    
   }, []);
 
   return {
     admissionData,
+   
     allDischargesData,
     allExpiredData,
     allTransInData,

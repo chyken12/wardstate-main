@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 
 function WardAdmissions() {
   const { wardType } = useParams();
-  const { admissionData, loading, error } = useAdmissionData();
+  const {  admissionData, loading, error } = useAdmissionData();
   const [searchTerm,setSearchTerm] = useState("")
 
   if (loading) {

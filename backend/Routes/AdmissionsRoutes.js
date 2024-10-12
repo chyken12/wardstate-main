@@ -7,6 +7,7 @@ import Admission from '../Models/Admissionmodel.js';
 
 // Route for saving a new Admission
 router.post('/', async (request, response) => {
+ 
   const newAdmission = new Admission({
     ...request.body,
     transferOutDate: request.body.transferOutDate || null,
@@ -14,21 +15,21 @@ router.post('/', async (request, response) => {
     transferInDate: request.body.transferInDate || null,
     dischargeDate: request.body.dischargeDate || null,
     expiredDate: request.body.expiredDate || null,
+    admissionStatus:'Admitted',
+    status:'Admitted' 
   });
+ 
+
+ 
+
+  if (request.body.status) {
+   
+    newAdmission.status = request.body.status;
+  }
   
-  // Update status based on transfer dates (optional)
-if (newAdmission.transferOutDate) {
-  newAdmission.status = 'TransferedOut';
-}
-else if(newAdmission.transferInDate){
-  newAdmission.status = 'TransferIn'
-}
-else if(newAdmission.dischargeDate){
-  newAdmission.status = 'Discharged'
-}
-else{
-  newAdmission.status = 'Expired'
-}
+
+
+
 // Transfer validation
 const errors = [];
 if (newAdmission.transferInDate && newAdmission.admissionDate) {
@@ -53,8 +54,11 @@ if (errors.length > 0) {
         response.status(201).json({ message: 'Admission successful!', admission: savedAdmission });
    
   } catch (error) {
-      
-      response.status(500).json({ message: 'Error saving admission' });
+    if (error.name === 'ValidationError') {
+      response.status(400).json({ error: error.message, details: error.errors });
+    } else {
+      response.status(500).json({ error: 'Internal Server Error' });
+    }
   }
 });
 
@@ -116,7 +120,7 @@ router.get('/', async (request,response) =>{
 //Route for getting all admitted cases
 router.get('/admitted', async (request,response) => {
   try {
-    const Admitted = await Admission.find({status:'Admitted'}) 
+    const Admitted = await Admission.find({ admissionStatus:'Admitted'}) 
     response.json(Admitted)
   } catch (error) {
     console.error(error)

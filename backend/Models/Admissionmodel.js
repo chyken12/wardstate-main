@@ -28,9 +28,15 @@ const admissionSchema = new mongoose.Schema(
   },
   status: {
       type: String,
-      enum: ['Admitted', 'Discharged', 'Expired','TransferedOut','TransferIn'],
+      enum: ['Admitted', 'Discharged', 'Expired','TransferOut','TransferIn'],
      
   },
+  admissionStatus: {
+    type: String,
+    enum: ['Admitted'],
+    default:'Admitted',
+   
+},
   Gender: {
     type: String,
     enum: ['Male', 'Female', 'Other'],

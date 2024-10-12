@@ -10,6 +10,8 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+import { toast } from 'react-toastify'; // Import toast library
+
 
   const AdmissionForm = () => {
   const [patientName, setPatientName] = useState("");
@@ -20,13 +22,15 @@ import { Calendar } from "@/components/ui/calendar";
   const [nhisStatus, setNhisStatus] = useState("");
   const [admissionDate, setAdmissionDate] = useState("");
   const [expiredDate, setExpiredDate] = useState("");
-  const [admissionOutcome,setAdmissionOutcom] = useState("Admitted")
+  const [admissionOutcome,setAdmissionOutcom] = useState("")
   const [transferInDate, setTransferInDate] = useState("");
   const [transferOutDate, setTransferOutDate] = useState("");
   const [dischargeDate,setDischargedDate] = useState('')
   const [error, setError] = useState(null);
   const [ward,setWard] = useState('');
+  const [status, setStatus] = useState("");
   const navigate = useNavigate();
+
 
   const formatDate = (date) => {
     return date instanceof Date ? date.toISOString().split('T')[0] : date;
@@ -36,9 +40,9 @@ import { Calendar } from "@/components/ui/calendar";
     event.preventDefault();
 
     if (!patientName || !patientId || !Age || !gender  || !admissionDate || !ward) {
-      setError("All fields are required.");
-      
+      toast.error("All fields are required."); // Display error message using toast
       return;
+  
      
     }
     
@@ -50,6 +54,8 @@ import { Calendar } from "@/components/ui/calendar";
       nhisStatus,
       ward,
       admissionDate: formatDate(admissionDate),
+      admissionStatus:'Admitted',
+      status:status,
       expiredDate: formatDate(expiredDate),
       admissionOutcome,
       transferInDate: formatDate(transferInDate),
@@ -64,12 +70,20 @@ import { Calendar } from "@/components/ui/calendar";
       .post("http://localhost:8000/api/admission", data)
       .then(() => {
         setLoading(false);
+        toast.success('Admission successful!'); // Display success message using toast
         navigate("/");
+        
       })
       .catch((error) => {
         setLoading(false);
-        const errorMsg = error.response?.data?.message || error.message;
-        setError(errorMsg);
+        if (error.response.status === 400) {
+          toast.error(error.response.data.error, {
+           
+            autoClose: 8000
+          });
+        } else {
+          console.log(error);
+        }
         
       });
   };
@@ -164,20 +178,20 @@ import { Calendar } from "@/components/ui/calendar";
         </div>
         <div className="space-y-2">
           <Label htmlFor="admissionOutcome">Admission Outcome</Label>
-          <Select value={admissionOutcome} onValueChange={(value) => setAdmissionOutcom(value)}>
-            <SelectTrigger id="admissionOutcome">
-              <SelectValue placeholder="Discharge" />
+          <Select value={status} onValueChange={(value) => setStatus(value)}>
+            <SelectTrigger id="status">
+              <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="select">select</SelectItem>
               <SelectItem value="Expired">Expired</SelectItem>
               <SelectItem value="Discharged">Discharged</SelectItem>
-              <SelectItem value="TransferInDate">Trans-In</SelectItem>
-              <SelectItem value="TransferOutDate">Trans-Out</SelectItem>
+              <SelectItem value="TransferIn">Trans-In</SelectItem>
+              <SelectItem value="TransferOut">Trans-Out</SelectItem>
             </SelectContent>
           </Select>
         </div>
-        {admissionOutcome === "Expired" &&(
+        {status === "Expired" &&(
           <div className="space-y-2">
           <Label htmlFor="expiredDate">Expired-Date</Label>
           <Popover>
@@ -194,7 +208,7 @@ import { Calendar } from "@/components/ui/calendar";
         </div>
         )}
 
-        {admissionOutcome === "Discharged" && (
+        {status === "Discharged" && (
           <div className="space-y-2">
           <Label htmlFor="dischargedDate">Discharge-Date</Label>
           <Popover>
@@ -212,7 +226,7 @@ import { Calendar } from "@/components/ui/calendar";
 
         )}
 
-        {admissionOutcome === "TransferInDate" &&(
+        {status === "TransferIn" &&(
            <div className="space-y-2">
            <Label htmlFor="transferInDate">TransIn-Date</Label>
            <Popover>
@@ -230,7 +244,7 @@ import { Calendar } from "@/components/ui/calendar";
  
         )}
 
-        {admissionOutcome === "TransferOutDate" &&(
+        {status === "TransferOut" &&(
                   <div className="space-y-2">
                   <Label htmlFor="transferOutDate">transOut-Date</Label>
                   <Popover>
