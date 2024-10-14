@@ -3,8 +3,9 @@
 import { useParams } from 'react-router-dom';
 import useAdmissionData from '@/contexts/useAdmissionData';
 
-import React, {useContext,useState} from "react";
+import React, {useContext,useState,useEffect} from "react";
 import AdmissionOutComeContext from "@/contexts/admissionOutcomeContext";
+import { calculateWardStatistics } from '@/utils/wardUtils';
 import DatePicker from "../DatePicker";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -14,9 +15,17 @@ function WardAdmissions() {
   const { wardType } = useParams();
   const {  admissionData, loading, error } = useAdmissionData();
   const [searchTerm,setSearchTerm] = useState("")
+  const [wardStats, setWardStats] = useState({});
+  
+  useEffect(() => {
+    if (!loading && !error) {
+      const stats = calculateWardStatistics(admissionData, wardType);
+      setWardStats(stats);
+    }
+  }, [admissionData, loading, error, wardType]);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <p> Loading... </p>;
   }
 
   if (error) {
@@ -26,46 +35,24 @@ function WardAdmissions() {
 
 
 
-// this can help with calculations
-  const wardCounts = admissionData.reduce((acc, admission) => {
-    const ward = admission.ward || 'Undefined';
-    acc[ward] = (acc[ward] || 0) + 1;
-    return acc;
-  }, {});
+// // this can help with calculations
+//   const wardCounts = admissionData.reduce((acc, admission) => {
+//     const ward = admission.ward || 'Undefined';
+//     acc[ward] = (acc[ward] || 0) + 1;
+//     return acc;
+//   }, {});
 
   
 
-  const filteredAdmissions = admissionData.filter(admission => {
-    const admissionWard = admission.ward || 'Undefined';
-   
-    return admissionWard === wardType;
-  });
+const filteredAdmissions = admissionData.filter(admission => 
+  admission.ward === wardType && 
+  admission.patientName.toLowerCase().includes(searchTerm.toLowerCase())
+);
+
 
  
 
-  const renderDebugInfo = () => (
-    <div className="bg-gray-100 p-4 mb-4 rounded">
-      <h3 className="font-bold">Debug Information</h3>
-      <p>Current ward type: {wardType}</p>
-      <p>Total admissions: {admissionData.length}</p>
-      <p>Admissions per ward:</p>
-      <ul>
-        {Object.entries(wardCounts).map(([ward, count]) => (
-          <li key={ward}>{ward}: {count}</li>
-        ))}
-      </ul>
-    </div>
-  );
-
-  if (filteredAdmissions.length === 0) {
-    return (
-      <div>
-        {renderDebugInfo()}
-        <p>No admissions found for {wardType} ward.</p>
-      </div>
-    );
-  }
-  // Function to handle the search input change
+  
 const handleSearch = (e) => {
   setSearchTerm(e.target.value);
 };
@@ -127,14 +114,14 @@ const filteredData = admissionData.filter((admission) => {
   <div class="w-1/5 bg-zinc-200 p-4">
     <h2 class="text-lg font-bold mb-4">{wardType}</h2>
     <ul class="space-y-2">
-     <h1>Remaind Prev. Night :</h1>
-     <h1>Total Admissions :</h1>
-     <h1>Total Discharges :</h1>
-     <h1>Total Deaths :</h1>
-     <h1>Remaind At MidNight :</h1>
-     <h1>Empty Beds :</h1>
-     <h1>Transfered-In :</h1>
-     <h1>Transfered-Out :</h1>
+    <li>Remained Prev. Night: {wardStats.remainedPreviousNight}</li>
+            <li>Total Admissions: {wardStats.totalAdmissions}</li>
+            <li>Total Discharges: {wardStats.totalDischarges}</li>
+            <li>Total Deaths: {wardStats.totalDeaths}</li>
+            <li>Remained At Midnight: {wardStats.remainedAtMidnight}</li>
+            <li>Empty Beds: {wardStats.emptyBeds}</li>
+            <li>Transferred-In: {wardStats.transferIn}</li>
+            <li>Transferred-Out: {wardStats.transferOut}</li>
     </ul>
     <Link to="/admissionform"><button class="mt-4 bg-orange-500 text-white py-2 px-4 rounded">ADD EVENT</button></Link>
   </div>

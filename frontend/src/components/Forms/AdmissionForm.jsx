@@ -71,7 +71,7 @@ import { toast } from 'react-toastify'; // Import toast library
       .then(() => {
         setLoading(false);
         toast.success('Admission successful!'); // Display success message using toast
-        navigate("/");
+        navigate("/");// NOTE have to make the form redirect to the submission ward
         
       })
       .catch((error) => {
