@@ -1,6 +1,7 @@
 
 import express, { request, response } from 'express'
 import Admission from '../Models/Admissionmodel.js';
+import { User,Ward } from '../Models/Usermodel.js';
 
   const router = express.Router()
 
@@ -92,17 +93,6 @@ router.get('/ward/:wardType', async (req, res) => {
   }
 });
 
-
-
-
-
-
-
-
-
-
-
-
 //this two are different
 //route for getting all admissions
 router.get('/', async (request,response) =>{
@@ -163,6 +153,18 @@ router.put('/:id', async (req, res) => {
     res.status(500).json({ message: 'Error updating  record' });
   }
 });
+
+router.get('/users/:id', async(req,res) => {
+  try {
+    const user = await User.findById(req.param.id).populate('ward')
+    if(!user){
+      return res.status(404).json({message:'User not found'})
+    }
+    res.status(200).json(user)
+  } catch (error) {
+    res.status(500).json({message:error.message})
+  }
+})
 
 
 export default  router

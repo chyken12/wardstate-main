@@ -35,12 +35,6 @@ function WardAdmissions() {
 
 
 
-// // this can help with calculations
-//   const wardCounts = admissionData.reduce((acc, admission) => {
-//     const ward = admission.ward || 'Undefined';
-//     acc[ward] = (acc[ward] || 0) + 1;
-//     return acc;
-//   }, {});
 
   
 
@@ -201,35 +195,5 @@ const filteredData = admissionData.filter((admission) => {
 }
 
 export default WardAdmissions;
-// return (
-  //   <div>
-  //     {renderDebugInfo()}
-  //     <h2>{wardType} Admissions</h2>
-  //     <p>Total admissions for this ward: {filteredAdmissions.length}</p>
-  //     <table className="w-full table-auto border-collapse">
-  //       <thead>
-  //         <tr>
-  //           <th>Patient Name</th>
-  //           <th>Age</th>
-  //           <th>Status</th>
-  //           <th>Ward</th>
-  //           <th>Admission Date</th>
-  //           <th>Discharge Date</th>
-  //         </tr>
-  //       </thead>
-  //       <tbody>
-  //         {filteredAdmissions.map((admission) => (
-  //           <tr key={admission._id}>
-  //             <td>{admission.patientName}</td>
-  //             <td>{admission.Age}</td>
-  //             <td>{admission.status}</td>
-  //             <td>{admission.ward || 'Undefined'}</td>
-  //             <td>{new Date(admission.admissionDate).toLocaleDateString()}</td>
-  //             <td>{admission.dischargeDate ? new Date(admission.dischargeDate).toLocaleDateString() : 'N/A'}</td>
-  //           </tr>
-  //         ))}
-  //       </tbody>
-  //     </table>
-  //   </div>
-  // );
+
 

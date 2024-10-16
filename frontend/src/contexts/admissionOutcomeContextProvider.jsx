@@ -6,6 +6,7 @@ const AdmissionOutComeProvider = ({ children }) => {
   const {
 
     admissionData,
+    userData,
     allDischargesData,
     allExpiredData,
     allTransInData,
@@ -36,6 +37,7 @@ const AdmissionOutComeProvider = ({ children }) => {
       value={{
        
         admissionData,
+        userData,
         allDischargesData,
         allExpiredData,
         allTransInData,

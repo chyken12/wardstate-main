@@ -71,7 +71,7 @@ import { toast } from 'react-toastify'; // Import toast library
       .then(() => {
         setLoading(false);
         toast.success('Admission successful!'); // Display success message using toast
-        navigate("/");// NOTE have to make the form redirect to the submission ward
+       navigate(`/ward/${ward}`);// NOTE have to make the form redirect to the submission ward
         
       })
       .catch((error) => {
@@ -83,6 +83,7 @@ import { toast } from 'react-toastify'; // Import toast library
           });
         } else {
           console.log(error);
+          toast.error("An error occurred while submitting the form.");
         }
         
       });
