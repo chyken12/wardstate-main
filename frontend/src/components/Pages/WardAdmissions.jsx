@@ -5,13 +5,16 @@ import useAdmissionData from '@/contexts/useAdmissionData';
 
 import React, {useContext,useState,useEffect} from "react";
 import AdmissionOutComeContext from "@/contexts/admissionOutcomeContext";
+import { UserContext } from '@/contexts/UserContetext';
 import { calculateWardStatistics } from '@/utils/wardUtils';
 import DatePicker from "../DatePicker";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { Navigate } from 'react-router-dom';
 
 
 function WardAdmissions() {
+  const {loggedInUser,loading: userLoading} = useContext(UserContext)
   const { wardType } = useParams();
   const {  admissionData, loading, error } = useAdmissionData();
   const [searchTerm,setSearchTerm] = useState("")
@@ -30,6 +33,14 @@ function WardAdmissions() {
 
   if (error) {
     return <p>Error: {error}</p>;
+  }
+
+  if (userLoading) {
+    return <p>Loading user data...</p>;
+  }
+
+  if (!loggedInUser) {
+    return <Navigate to="/login" replace />;
   }
 
 
@@ -73,7 +84,7 @@ const filteredData = admissionData.filter((admission) => {
       <div className="flex flex-col min-h-screen bg-gray-100 border-b-4 ml-10 mr-10">
         <header className="flex flex-row justify-between bg-white shadow px-4 py-2">
           <div className="text-xl font-bold">KWAHU GOVERNMENT HOSPITAL</div>
-          <div className="text-xl font-bold">User info</div>
+          <div className="text-xl font-bold">Welcome,{loggedInUser?.username}</div>
         </header>
         <div className="flex flex-row justify-between bg-gray-200 px-4 py-2">
           <div className="text-sm font-medium">DAILY WARD STATE</div>

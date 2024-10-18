@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState,useContext } from 'react';
+import { UserContext } from '@/contexts/UserContetext';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
@@ -10,6 +11,7 @@ function LoginForm() {
     username: '',
     password: ''
   });
+  const  {setLoggedInUser} = useContext(UserContext)
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
@@ -29,9 +31,11 @@ function LoginForm() {
       if (response.data && response.data.token && response.data.user) {
         toast.success('Login successful!');
         const { token, user } = response.data;
-       
 
         localStorage.setItem('authToken', token);
+        localStorage.setItem('user', JSON.stringify(user));
+
+        setLoggedInUser(user)
         
         const wardRoutes = {
           'Male Medical': '/ward/Male Medical',
