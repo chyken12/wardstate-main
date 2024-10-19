@@ -1,6 +1,7 @@
 import React from "react";
 import AdmissionOutComeContext from "./admissionOutcomeContext";
 import useAdmissionData from "./useAdmissionData";
+import Loader from "@/components/ui/loader";
 
 const AdmissionOutComeProvider = ({ children }) => {
   const {
@@ -25,7 +26,12 @@ const AdmissionOutComeProvider = ({ children }) => {
     error,
   } = useAdmissionData();
   if (loading) {
-    return <div>Loading....</div>;
+    return (<Loader
+      size={220}
+      customText="Preparing your medical data"
+      showProgress={true}
+      progressDuration={15}
+      />);
   }
 
   if (error) {
