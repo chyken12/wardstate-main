@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { CalendarDays, User, Activity, Stethoscope } from 'lucide-react'
 import useAdmissionData from '@/contexts/useAdmissionData'
+import Loader from '../ui/loader'
 
 // Custom Badge component
 const Badge = ({ children, variant = 'default' }) => {
@@ -24,7 +25,12 @@ export default function DetailView() {
   const { admissionData, loading, error } = useAdmissionData()
 
   if (loading) {
-    return <div>Loading...</div>
+    return( <Loader
+      size={250}
+      customText="Preparing your medical data"
+      showProgress={true}
+      progressDuration={15}
+    />)
   }
 
   if (error) {

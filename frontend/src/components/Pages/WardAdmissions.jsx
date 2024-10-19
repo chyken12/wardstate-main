@@ -1,15 +1,13 @@
 
-
+import Loader from '../ui/loader';
 import { useParams, useNavigate, Link, Navigate } from 'react-router-dom';
 import useAdmissionData from '@/contexts/useAdmissionData';
-import axios from 'axios';
-
 import React, {useContext,useState,useEffect} from "react";
 import { UserContext } from '@/contexts/UserContetext';
 import { calculateWardStatistics } from '@/utils/wardUtils';
 import DatePicker from "../DatePicker";
 import { Button } from "@/components/ui/button";
-import { toast,Bounce,Slide  } from 'react-toastify';
+import { toast,Slide  } from 'react-toastify';
 
 
 
@@ -23,6 +21,7 @@ function WardAdmissions() {
   const [wardStats, setWardStats] = useState({});
   const navigate = useNavigate();
   
+  
   useEffect(() => {
     if (!loading && !error) {
       const stats = calculateWardStatistics(admissionData, wardType);
@@ -31,7 +30,12 @@ function WardAdmissions() {
   }, [admissionData, loading, error, wardType]);
 
   if (loading) {
-    return <p> Loading... </p>;
+    return( <Loader
+      size={250}
+      customText="Preparing your medical data"
+      showProgress={true}
+      progressDuration={15}
+    />)
   }
 
   if (error) {

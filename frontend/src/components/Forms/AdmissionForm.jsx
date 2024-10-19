@@ -1,5 +1,5 @@
 
-
+import Loader from "../ui/loader";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -89,7 +89,12 @@ import { toast } from 'react-toastify'; // Import toast library
       });
   };
   if (loading) {
-        return <div>Loading...</div>;
+        return (<Loader
+          size={220}
+          customText="Preparing your medical data"
+          showProgress={true}
+          progressDuration={15}
+          />);
       }
     
       if (error) {

@@ -1,3 +1,4 @@
+import Loader from "../ui/loader";
 import React, { useState, useEffect } from "react";
 import { useNavigate,useParams } from "react-router-dom";
 import axios from "axios";
@@ -139,7 +140,12 @@ export default function UpdateAdmissionForm() {
     }
   };
   if (loading) {
-    return <div>Loading...</div>;
+    return (<Loader
+      size={220}
+      customText="Preparing your medical data"
+      showProgress={true}
+      progressDuration={15}
+      />);
   }
 
   return (
