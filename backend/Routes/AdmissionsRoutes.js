@@ -76,6 +76,18 @@ router.get('/', async (request,response) =>{
     
   }
 })
+router.get('/:id', async (request,response) =>{
+  const {id} = request.params.id
+  try {
+    const admission = await Admission.find(id)
+    response.json(admission)
+    
+  } catch (error) {
+    console.error(error)
+    response.status(500).json({message:'error retriving admissions'})
+    
+  }
+})
 
 
 // Fetch admissions for a specific ward
@@ -93,20 +105,7 @@ router.get('/ward/:wardType', async (req, res) => {
   }
 });
 
-//this two are different
-//route for getting all admissions
-router.get('/', async (request,response) =>{
-  try {
-    const admissions = await Admission.find()
-    response.json(admissions)
 
-    
-  } catch (error) {
-    console.error(error)
-    response.status(500).json({message:'error retriving admissions'})
-    
-  }
-})
 //Route for getting all admitted cases
 router.get('/admitted', async (request,response) => {
   try {
@@ -120,39 +119,40 @@ router.get('/admitted', async (request,response) => {
 })
 //route to delete an admitted case
 router.delete('/:id', async (req, res) => {
-  const { id } = req.params; // Extract ID from request parameters
-
   try {
-    const deletedAdmitted = await Admission.findByIdAndDelete(id); // Delete by ID
-    if (!deletedAdmitted) {
-      return res.status(404).json({ message: 'Admitted record not found' });
+    const deletedAdmission = await Admission.findByIdAndDelete(req.params.id);
+    if (!deletedAdmission) {
+      return res.status(404).json({ message: 'Admission record not found' });
     }
-    res.status(200).json({ message: 'Admitted record deleted successfully' });
+    res.status(200).json({ message: 'Admission record deleted successfully' });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Error deleting Admited record' });
+    res.status(500).json({ message: 'Error deleting Admission record', error: err.message });
   }
 });
 
 //update admission
-router.put('/:id', async (req, res) => {
-  const { id } = req.params; // Extract ID from request parameters
-  const updateData = req.body
-  
+router.put('/update-admission/:id', async (req, res) => {
+  const { id } = req.params;
+  const updateData = req.body;
 
   try {
-    const updateadmission = await Admission.findByIdAndUpdate(id,updateData,{new:true}); // 
-  
+    const updatedAdmission = await Admission.findOneAndUpdate(
+      { patientId: id },
+      updateData,
+      { new: true }
+    );
 
-    if (!updateadmission) {
-      return res.status(404).json({ message: ' record not found' });
+    if (!updatedAdmission) {
+      return res.status(404).json({ message: 'Admission record not found' });
     }
-    res.status(200).json({ message: ' record updated successfully' });
+    res.status(200).json({ message: 'Admission record updated successfully', admission: updatedAdmission });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Error updating  record' });
+    res.status(500).json({ message: 'Error updating admission record', error: err.message });
   }
 });
+
 
 router.get('/users/:id', async(req,res) => {
   try {

@@ -18,14 +18,17 @@ import TransInform from "./components/Forms/TransInForm";
 import TransOutform from "./components/Forms/TransOutForm";
 import LoginForm from "./components/Forms/LoginForm";
 import SignUpForm from "./components/Forms/SignUpForm";
+import UpdateAdmissionForm from "./components/Forms/UpdateAdmissionForm";
+import DetailView from "./components/Pages/DetailView";
 
 function App() {
   return (
     <div>
-      <ToastContainer /> {/* This can be anywhere in your component tree */}
+      <ToastContainer/> {/* This can be anywhere in your component tree */}
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/admissionform' element={<AdmissionForm />} />
+        <Route path='/update-admission/:id' element={<UpdateAdmissionForm  />} />
         <Route path='/dischargeform' element={<DischargeForm />} />
         <Route path='/expiredform' element={<ExpiredForm />} />
         <Route path='/transinform' element={<TransInform />} />
@@ -38,7 +41,8 @@ function App() {
         <Route path='/all-transin' element={<AllTransIn />} />
         <Route path='/all-transout' element={<AllTransOut />} />
         <Route path='/all-expired' element={<AllExpired />} /> 
-        <Route path="/ward/:wardType" element={<WardPage />} />      
+        <Route path="/ward/:wardType" element={<WardPage />} />
+        <Route path='/detail-view/:id' element={<DetailView />} />       
       </Routes>
     </div>
   );

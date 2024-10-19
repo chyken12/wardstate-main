@@ -11,7 +11,7 @@ const useAdmissionData = () => {
   const [allTransOutData, setAllTransOutData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [wardMetrics, setWardMetrics] = useState({});
+ 
 
   const fetchAdmissionData = async () => {
     try {
@@ -195,6 +195,19 @@ const useAdmissionData = () => {
     }
   };
 
+
+  const deleteAdmission = async (id) => {
+    try {
+      setLoading(true);
+      await axios.delete(`http://localhost:8000/api/admission/${id}`);
+      setAdmissionData((prevData) => prevData.filter((admission) => admission._id !== id));
+    } catch (err) {
+      setError(`Error deleting admission: ${err.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   
 
   useEffect(() => {
@@ -210,6 +223,7 @@ const useAdmissionData = () => {
 
   return {
     admissionData,
+    deleteAdmission,
    
     allDischargesData,
     allExpiredData,

@@ -1,24 +1,27 @@
 
 
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate, Link, Navigate } from 'react-router-dom';
 import useAdmissionData from '@/contexts/useAdmissionData';
+import axios from 'axios';
 
 import React, {useContext,useState,useEffect} from "react";
-import AdmissionOutComeContext from "@/contexts/admissionOutcomeContext";
 import { UserContext } from '@/contexts/UserContetext';
 import { calculateWardStatistics } from '@/utils/wardUtils';
 import DatePicker from "../DatePicker";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
-import { Navigate } from 'react-router-dom';
+import { toast,Bounce,Slide  } from 'react-toastify';
+
+
+
 
 
 function WardAdmissions() {
   const {loggedInUser,loading: userLoading} = useContext(UserContext)
   const { wardType } = useParams();
-  const {  admissionData, loading, error } = useAdmissionData();
+  const {  admissionData, loading, error, deleteAdmission } = useAdmissionData();
   const [searchTerm,setSearchTerm] = useState("")
   const [wardStats, setWardStats] = useState({});
+  const navigate = useNavigate();
   
   useEffect(() => {
     if (!loading && !error) {
@@ -75,6 +78,69 @@ const filteredData = admissionData.filter((admission) => {
   const formatDate = (date) => {
     if (!date) return "mm/dd/yyyy";
     return new Date(date).toLocaleDateString(); // Formats to "7/10/2024" or similar based on locale
+  };
+
+  
+
+  const handleView = (admission) => {
+    navigate(`/detail-view/${admission._id}`);
+  };
+
+  const handleDelete = (admission) => {
+    const ToastContent = ({ closeToast }) => (
+      <div>
+        <p>Are you sure you want to delete this admission?</p>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
+          <button
+            onClick={() => {
+              confirmDelete(admission);
+              closeToast();
+            }}
+            style={{ marginRight: '10px', padding: '5px 10px', backgroundColor: '#d9534f', color: 'white', border: 'none', borderRadius: '3px' }}
+          >
+            Confirm
+          </button>
+          <button
+            onClick={closeToast}
+            style={{ padding: '5px 10px', backgroundColor: '#f0ad4e', color: 'white', border: 'none', borderRadius: '3px' }}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    );
+  
+    toast.warn(<ToastContent />, {
+      position: "top-center",
+      autoClose: false,
+      hideProgressBar: true,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: false,
+      progress: undefined,
+      theme: "light",
+      transition: Slide,
+    });
+  };
+  
+  const confirmDelete = async (admission) => {
+    try {
+      await deleteAdmission(admission._id);
+      toast.success('Admission deleted successfully', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Slide,
+      });
+    } catch (error) {
+      console.error('Error deleting admission:', error);
+      toast.error(`Failed to delete admission: ${error.message}`);
+    }
   };
 
 
@@ -186,9 +252,15 @@ const filteredData = admissionData.filter((admission) => {
                   
                  </div>
                  <div class="flex space-x-2">
-                   <button class="bg-green-500 text-white py-1 px-2 rounded">View</button>
+                  
+                     <button class="bg-green-500 text-white py-1 px-2 rounded" onClick={() => handleView(admission)}>View</button>
+                    
+                  
+                   <Link to={`/update-admission/${admission._id}`}>
                    <button class="bg-blue-500 text-white py-1 px-2 rounded">Update </button>
-                   <button class="bg-red-500 text-white py-1 px-2 rounded">Delete</button>
+                   </Link>
+                  
+                   <button class="bg-red-500 text-white py-1 px-2 rounded" onClick={() => handleDelete(admission)}>Delete</button>
                  </div>
                </div>
              </td>
