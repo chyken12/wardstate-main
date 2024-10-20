@@ -4,11 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "node server/App.js",
-    "build": "cd client && npm install && npm run build",
+    
+    "build": "vite build",
     "dev": "vite",
-    "server": "nodemon server/App.js",
-    "client": "cd client && npm run dev",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },

@@ -1,5 +1,6 @@
 .env
+# Ignore package-lock.json
+package-lock.json
 
-README.md
 
-server/public
+
