@@ -1,5 +1,5 @@
 .env
-node_module
-package-lock.json
+
 README.md
 
+server/public
