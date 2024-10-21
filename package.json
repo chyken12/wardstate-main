@@ -3,8 +3,7 @@
     "version": "1.0.0",
     "scripts": {
      "start": "node server.js",
-    "build": "npm install && npm run build && cd server && npm install"
-    },
+  "build": "npm install --prefix ./client && npm run build --prefix ./client && npm install"    },
     "dependencies": {
       "axios": "^1.7.7",
       "bcryptjs": "^2.4.3",
