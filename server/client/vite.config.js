@@ -6,8 +6,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
-      'framer-motion': 'framer-motion/dist/framer-motion'
+      '@': path.resolve(__dirname, './src')
     }
   },
   build: {
