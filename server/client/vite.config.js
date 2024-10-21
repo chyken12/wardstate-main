@@ -6,13 +6,11 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src')
+      '@': path.resolve(__dirname, './src'),
+      'framer-motion': 'framer-motion/dist/framer-motion'
     }
   },
   build: {
-    outDir: 'build',
-    rollupOptions: {
-      external: ['framer-motion']
-    }
+    outDir: 'build'
   }
 })
