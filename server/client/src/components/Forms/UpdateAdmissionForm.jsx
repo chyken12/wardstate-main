@@ -26,6 +26,7 @@ export default function UpdateAdmissionForm() {
     dischargeDate: "",
     transferOutDate: ""
   });
+  
 
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
@@ -35,7 +36,7 @@ export default function UpdateAdmissionForm() {
   useEffect(() => {
     const fetchAdmissionData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/admission/${id}`);
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/admission/${id}`);
         const admissionData = response.data;
         console.log("Fetched admission data:", admissionData);
         

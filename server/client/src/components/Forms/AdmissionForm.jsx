@@ -67,7 +67,7 @@ import { toast } from 'react-toastify'; // Import toast library
 
     setLoading(true);
     axios
-      .post("http://localhost:8000/api/admission", data)
+      .post( `${import.meta.env.VITE_API_URL}/api/admission`, data)
       .then(() => {
         setLoading(false);
         toast.success('Admission successful!'); // Display success message using toast
