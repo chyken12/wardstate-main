@@ -15,7 +15,7 @@ const useAdmissionData = () => {
 
   const fetchAdmissionData = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/api/admission");
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/admission`);
       // Ensure response data is an array
       const data = Array.isArray(response.data)
         ? response.data
@@ -37,7 +37,7 @@ const useAdmissionData = () => {
   const updateAdmissionData = async (newData) => {
     try {
       setLoading(true);
-      await axios.put("http://localhost:8000/api/admission", newData);
+      await axios.put(`${import.meta.env.VITE_API_URL}/api/admission`, newData);
       setAdmissionData((prevData) =>
         prevData.map((admission) =>
           admission.patientId === newData.patientId
@@ -56,7 +56,8 @@ const useAdmissionData = () => {
   // function to fetch all discharges
   const fetchAllDicharges = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/api/discharges");
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/discharges`);
+      
       // ensure response data is an array
       const data = Array.isArray(response.data)
         ? response.data
@@ -75,7 +76,7 @@ const useAdmissionData = () => {
   const updateDischargeData = async (newData) => {
     try {
       setLoading(true);
-      await axios.put("http://localhost:8000/api/discharges", newData);
+      await axios.put(`${import.meta.env.VITE_API_URL}/api/discharges`, newData);
       setAllDischaregsData((prevData) =>
         prevData.map((discharge) =>
           discharge.patientId === newData.patientId
@@ -92,7 +93,8 @@ const useAdmissionData = () => {
 
   const fetchAllExpired= async () => {
     try {
-      const response = await axios.get("http://localhost:8000/api/expired");
+      const response = await axios.get( `${import.meta.env.VITE_API_URL}/api/expired`);
+     
       // ensure response data is an array
       const data = Array.isArray(response.data)
         ? response.data
@@ -110,7 +112,7 @@ const useAdmissionData = () => {
   const updateExpiredData = async (newData) => {
     try {
       setLoading(true);
-      await axios.put("http://localhost:8000/api/expired", newData);
+      await axios.put( `${import.meta.env.VITE_API_URL}/api/expired`, newData);
       setAllExpiredData((prevData) =>
         prevData.map((expired) =>
           expired.patientId === newData.patientId
@@ -127,7 +129,7 @@ const useAdmissionData = () => {
 
   const fetchTransInData = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/api/transin");
+      const response = await axios.get( `${import.meta.env.VITE_API_URL}/api/transin`);
       // Ensure response data is an array
       const data = Array.isArray(response.data)
         ? response.data
@@ -144,7 +146,7 @@ const useAdmissionData = () => {
   const updateAllTransInData = async (newData) => {
     try {
       setLoading(true);
-      await axios.put("http://localhost:8000/api/transin", newData);
+      await axios.put( `${import.meta.env.VITE_API_URL}/api/transin`, newData);
       setAllTransInData((prevData) =>
         prevData.map((transfer) =>
           transfer.patientId === newData.patientId
@@ -162,7 +164,7 @@ const useAdmissionData = () => {
 
   const fetchTransOutData = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/api/transout");
+      const response = await axios.get( `${import.meta.env.VITE_API_URL}/api/transout`);
       // Ensure response data is an array
       const data = Array.isArray(response.data)
         ? response.data
@@ -180,7 +182,7 @@ const useAdmissionData = () => {
   const updateAllTransOutData = async (newData) => {
     try {
       setLoading(true);
-      await axios.put("http://localhost:8000/api/transout", newData);
+      await axios.put( `${import.meta.env.VITE_API_URL}/api/transout`, newData);
       setAllTransOutData((prevData) =>
         prevData.map((transfer) =>
           transfer.patientId === newData.patientId
@@ -199,7 +201,7 @@ const useAdmissionData = () => {
   const deleteAdmission = async (id) => {
     try {
       setLoading(true);
-      await axios.delete(`http://localhost:8000/api/admission/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL}/api/admission/${id}`);
       setAdmissionData((prevData) => prevData.filter((admission) => admission._id !== id));
     } catch (err) {
       setError(`Error deleting admission: ${err.message}`);
