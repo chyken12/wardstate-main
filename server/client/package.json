@@ -1,6 +1,8 @@
 {
   "name": "wardstate-client",
   "version": "1.0.0",
+  "type": "module",
+  "main": "server.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -23,7 +25,8 @@
     "react-router-dom": "^6.23.1",
     "react-toastify": "^10.0.5",
     "tailwind-merge": "^2.3.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "framer-motion": "^10.18.0"
    
   },
   "devDependencies": {
