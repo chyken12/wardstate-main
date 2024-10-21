@@ -1,25 +1,13 @@
 {
-    "name": "wardstate",
-    "version": "1.0.0",
-    "scripts": {
-     "start": "node server.js",
-  "build": "npm install --prefix ./client && npm run build --prefix ./client && npm install"    },
-    "dependencies": {
-      "axios": "^1.7.7",
-      "bcryptjs": "^2.4.3",
-      "cors": "^2.8.5",
-      "date-fns": "^3.6.0",
-      "dotenv": "^16.4.5",
-      "express": "^4.17.1",
-      "jsonwebtoken": "^9.0.2",
-      "mongoose": "^6.0.12",
-      "react-toastify": "^10.0.5"
-    },
-    "devDependencies": {
-      "concurrently": "^8.0.1",
-      "nodemon": "^3.1.3"
-    },
-    "engines": {
-      "node": ">=14.0.0"
-    }
+  "name": "wardstate",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node server/server.js",
+    "build": "npm install && npm run build:client && npm run install:server",
+    "build:client": "cd client && npm install && npm run build",
+    "install:server": "cd server && npm install"
+  },
+  "engines": {
+    "node": ">=14.0.0"
   }
+}
