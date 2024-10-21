@@ -35,13 +35,10 @@ app.use('/api/transout', transOutRoutes);
 app.use('/api/auth', AuthRoutes);
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname,  'client/dist')));
+app.use(express.static(path.join(__dirname, 'client', 'build')));
 
-
-
-// Catch-all route
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname," /client/dist/index.html"));
+  res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 });
 
 // Set mongoose strictQuery option

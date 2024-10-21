@@ -2,10 +2,8 @@
     "name": "wardstate",
     "version": "1.0.0",
     "scripts": {
-      "start": "node server/server.js",
-      "build": "npm cache clean --force && npm install && npm run build:client && npm run install:server",      "build:client": "cd server/client && npm install && npm run build",
-      "install:server": "cd server && npm install"
-    },
+    "start": "node server/server.js",
+    "build": "cd server/client && npm install && npm run build && cd ../.. && cd server && npm install"    },
     "engines": {
       "node": ">=14.0.0"
     }
