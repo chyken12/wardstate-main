@@ -1,6 +1,7 @@
 {
     "name": "wardstate",
     "version": "1.0.0",
+    "type": "module",
     "scripts": {
     "start": "node server/server.js",
     "build": "cd server/client && npm install && npm run build && cd ../.. && cd server && npm install"    },
