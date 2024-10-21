@@ -24,7 +24,11 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+// Updated CORS configuration
+app.use(cors({
+  origin: process.env.FRONTEND_URL,
+  credentials: true
+}));
 
 // API routes
 app.use('/api/admission', AdmissionsRoutes);
@@ -47,12 +51,24 @@ mongoose.set('strictQuery', false); // or true
 mongoose
   .connect(process.env.mongoDBURL)
   .then(() => {
-    console.log('App connected to DB');
+    console.log('Successfully connected to MongoDB');
    
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
+      console.log(`Frontend URL: ${process.env.FRONTEND_URL}`);
     });
   })
   .catch((error) => {
-    console.log(error);
+    console.log('MongoDB connection error:', error);
   });
+
+  // Global error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+
+// Log unhandled promise rejections
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+});
