@@ -25,7 +25,9 @@ function SignUpForm() {
   useEffect(() => {
     const fetchWards = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/auth/wards'); // Fetch ward list from your backend
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/wards`); 
+       
+        // Fetch ward list from your backend
         setWards(response.data); // Set the wards in state
       } catch (error) {
         toast.error('Error fetching wards');
