@@ -1,12 +1,9 @@
-import React from "react";
-import{ Link }from 'react-router-dom'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import React, { lazy, Suspense } from "react";
 import { CardContent, Card } from "@/components/ui/card"
-import { Hospital } from "lucide-react";
+import { Hospital, Loader } from "lucide-react";
 
-import LoginForm from "../Forms/LoginForm";
+
+const LoginForm = lazy(() => import("../Forms/LoginForm"));
 
 const Home = () => {
   return (
@@ -28,7 +25,10 @@ const Home = () => {
           </div>
           <Card className="w-full max-w-sm mx-auto">
             <CardContent className="p-6">
+              <Suspense fallback={<Loader></Loader>}>
               <LoginForm></LoginForm>
+              </Suspense>
+              
             </CardContent>
           </Card>
         </div>

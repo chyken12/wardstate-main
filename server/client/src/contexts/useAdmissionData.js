@@ -169,9 +169,7 @@ const useAdmissionData = () => {
       const data = Array.isArray(response.data)
         ? response.data
         : [response.data];
-        console.log('Processed Data:', data);
       setAllTransOutData(data);
-      console.log("transout Response:", response.data);
     } catch (error) {
       setError(`Error fetching data: ${error.message}`);
     } finally {

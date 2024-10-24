@@ -38,41 +38,41 @@ export default function UpdateAdmissionForm() {
       try {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/admission/${id}`);
         const admissionData = response.data;
-        console.log("Fetched admission data:", admissionData);
         
-        if (Array.isArray(admissionData) && admissionData.length > 0) {
-          const selectedAdmission = admissionData[0]; // Assuming the first item is the correct one
-          setFormData({
-            patientName: selectedAdmission.patientName || "",
-            patientId: selectedAdmission.patientId || "",
-            Age: selectedAdmission.Age?.toString() || "",
-            gender: selectedAdmission.gender || "",
-            nhisStatus: selectedAdmission.nhisStatus || "",
-            ward: selectedAdmission.ward || "",
-            admissionDate: selectedAdmission.admissionDate ? new Date(selectedAdmission.admissionDate) : "",
-            status: selectedAdmission.status || "",
-            expiredDate: selectedAdmission.expiredDate ? new Date(selectedAdmission.expiredDate) : "",
-            transferInDate: selectedAdmission.transferInDate ? new Date(selectedAdmission.transferInDate) : "",
-            dischargeDate: selectedAdmission.dischargeDate ? new Date(selectedAdmission.dischargeDate) : "",
-            transferOutDate: selectedAdmission.transferOutDate ? new Date(selectedAdmission.transferOutDate) : ""
-          });
-        } else {
-          toast.error("No admission data found.");
-        }
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching admission data:", error);
-        toast.error("Failed to fetch admission data. Please try again.");
-        setLoading(false);
+        const selectedAdmission = Array.isArray(admissionData) 
+        ? admissionData.find(admission => admission._id === id)
+        : admissionData; // If the API returns a single object
+
+      if (selectedAdmission) {
+        setFormData({
+          patientName: selectedAdmission.patientName || "",
+          patientId: selectedAdmission.patientId || "",
+          Age: selectedAdmission.Age?.toString() || "",
+          gender: selectedAdmission.gender || "",
+          nhisStatus: selectedAdmission.nhisStatus || "",
+          ward: selectedAdmission.ward || "",
+          admissionDate: selectedAdmission.admissionDate ? new Date(selectedAdmission.admissionDate) : "",
+          status: selectedAdmission.status || "",
+          expiredDate: selectedAdmission.expiredDate ? new Date(selectedAdmission.expiredDate) : "",
+          transferInDate: selectedAdmission.transferInDate ? new Date(selectedAdmission.transferInDate) : "",
+          dischargeDate: selectedAdmission.dischargeDate ? new Date(selectedAdmission.dischargeDate) : "",
+          transferOutDate: selectedAdmission.transferOutDate ? new Date(selectedAdmission.transferOutDate) : ""
+        });
+      } else {
+        toast.error("Admission record not found.");
       }
-    };
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching admission data:", error);
+      toast.error("Failed to fetch admission data. Please try again.");
+      setLoading(false);
+    }
+  };
 
-    fetchAdmissionData();
-  }, [id]);
-
+  fetchAdmissionData();
+}, [id, navigate]);
 
   useEffect(() => {
-    console.log("Updated form data:", formData); // Debug log
   }, [formData]);
 
   const handleInputChange = (e) => {

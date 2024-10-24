@@ -63,7 +63,8 @@ function SignUpForm() {
       return
     }
     try {
-      const response = await axios.post('http://localhost:8000/api/auth/signup', body);
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/signup`, body);
+      
     
        // Handle successful signup(e.g., save token, redirect)
       toast.success('SignUp successful!');

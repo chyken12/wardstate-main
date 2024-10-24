@@ -97,6 +97,7 @@ const filteredData = admissionData.filter((admission) => {
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
           <button
             onClick={() => {
+              console.log('Confirming delete for admission:', admission);
               confirmDelete(admission);
               closeToast();
             }}
