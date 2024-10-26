@@ -34,6 +34,8 @@ const  LoginForm = lazy(() => import("./components/Forms/LoginForm")) ;
 const  SignUpForm = lazy(() => import("./components/Forms/SignUpForm")) ;
 const  UpdateAdmissionForm = lazy(() => import("./components/Forms/UpdateAdmissionForm")) ;
 const  DetailView = lazy(() =>  import("./components/Pages/DetailView")) 
+const  AdminDashboard  = lazy(() => import("./components/Pages/Admin-Dashboard"))
+const ProtectedAdminRoute = lazy(() => import('./components/Pages/ProtectedRoute'))
 
 
 function App() {
@@ -62,7 +64,16 @@ function App() {
         <Route path='/all-transout' element={<AllTransOut />} />
         <Route path='/all-expired' element={<AllExpired />} /> 
         <Route path="/ward/:wardType" element={<WardPage />} />
-        <Route path='/detail-view/:id' element={<DetailView />} />       
+        <Route path='/detail-view/:id' element={<DetailView />} /> 
+        <Route path='/admin-dashboard' element={<AdminDashboard/>} />
+        <Route
+        path="/Admin-Dashboard"
+        element={
+          <ProtectedAdminRoute>
+            <AdminDashboard />
+          </ProtectedAdminRoute>
+        }
+      />       
       </Routes>
       </Suspense>
       

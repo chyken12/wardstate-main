@@ -13,7 +13,7 @@ const WardSchema = new mongoose.Schema({
       "Maternity",
       "Kids Ward",
     ],
-    required: [true, 'Please select a ward'] // Ensure the ward is required
+    required: [true, 'Please select a ward']
   }
 });
 
@@ -40,30 +40,36 @@ const UserSchema = new mongoose.Schema({
   ward: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Ward",
-    required: true,
-  }, // Reference to Ward
-
-  role: { type: String, enum: ["user", "admin"], default: "user" }, // Roles
+    required: function() {
+      return this.role === "user"; // Only required if role is user
+    }
+  },
+  role: { 
+    type: String, 
+    enum: ["user", "admin"], 
+    default: "user",
+    lowercase: true, // Ensure role is always stored in lowercase
+  }
 });
 
-// Consolidated Password Hashing and Username Validation Middleware
+// Middleware to transform role to lowercase before saving
 UserSchema.pre("save", async function (next) {
   if (this.isModified("password")) {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
-    
   }
+  
+  // Convert role to lowercase
+  if (this.role) {
+    this.role = this.role.toLowerCase();
+  }
+  
   next();
 });
 
-// Compare Passwords Method
 UserSchema.methods.comparePassword = async function(enteredPassword) {
-  
-  const match = await bcrypt.compare(enteredPassword, this.password);
-  
-  return match;
+  return await bcrypt.compare(enteredPassword, this.password);
 };
-
 
 const User = mongoose.model("User", UserSchema);
 

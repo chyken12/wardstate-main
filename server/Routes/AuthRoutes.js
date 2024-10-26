@@ -34,6 +34,9 @@ router.post('/login', async (req, res) => {
 
     const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '1h' });
 
+     // Include redirectUrl in the response based on user role
+     const redirectUrl = user.role === 'Admin' ? '/admin-dashboard' : '/login';
+
     res.json({
       token,
       message: 'Login successful',
@@ -42,6 +45,7 @@ router.post('/login', async (req, res) => {
         role: user.role,
         ward: user.ward,
       },
+      redirectUrl
     });
   } catch (error) {
     console.error('Login error:', error);
@@ -52,10 +56,17 @@ router.post('/login', async (req, res) => {
 // POST /signup
 router.post('/signup', async (req, res) => {
   try {
-    const { username, password, wardName } = req.body;
+    const { username, password, wardName, role } = req.body;
 
-    if (!username || !password || !wardName) {
-      return res.status(400).json({ message: 'Username, password, and ward name are required' });
+    if (!username || !password || !role) {
+      return res.status(400).json({ message: 'Username, password and role are required' });
+    }
+
+    // Convert role to lowercase for validation
+    const normalizedRole = role.toLowerCase();
+
+    if (!['user', 'admin'].includes(normalizedRole)) {
+      return res.status(400).json({ message: 'Invalid role' });
     }
 
     if (password.length < 6 || password.length > 30) {
@@ -63,33 +74,51 @@ router.post('/signup', async (req, res) => {
     }
 
     const existingUser = await User.findOne({ username });
-
     if (existingUser) {
       return res.status(400).json({ message: 'Username already exists' });
     }
 
-    let ward = await Ward.findOne({ type: wardName });
+    let wardId;
+    // Only process ward if role is user
+    if (normalizedRole === 'user') {
+      if (!wardName) {
+        return res.status(400).json({ message: 'Ward selection is required for User role' });
+      }
 
-    if (!ward) {
-      ward = new Ward({ type: wardName });
-      await ward.save();
+      let ward = await Ward.findOne({ type: wardName });
+      if (!ward) {
+        const allowedWards = [
+          'Male Medical',
+          'Female Medical',
+          'Male Surgical',
+          'Female Surgical',
+          'Maternity',
+          'NICU',
+          'Kids Ward'
+        ];
+
+        if (!allowedWards.includes(wardName)) {
+          return res.status(400).json({ message: 'Invalid ward selection' });
+        }
+
+        ward = new Ward({ type: wardName });
+        await ward.save();
+      }
+      wardId = ward._id;
     }
-
-    // const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = new User({
       username,
       password,
-      ward: ward._id,
+      role: normalizedRole,
+      ...(normalizedRole === 'user' ? { ward: wardId } : {})
     });
 
     await newUser.save();
 
     res.status(201).json({ message: 'User registered successfully' });
   } catch (error) {
-    if (error.code === 11000 && error.keyPattern.username) {
-      return res.status(400).json({ message: 'Username already exists' });
-    }
+    console.error('Signup error:', error);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
