@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { useParams } from 'react-router-dom';
 import WardAdmissions from './WardAdmissions';
+import Dashboard from '../dashboard';
+
 
 function AdminDashboard() {
   
 
   return (
     <div>
-      <h1>Admin dashboard</h1>
+      
+     <Dashboard></Dashboard>
+     
     </div>
   );
 }

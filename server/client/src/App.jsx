@@ -5,31 +5,18 @@ import React, { lazy, Suspense } from "react";
 import { Loader } from "lucide-react";
 
 
-// import Home from "./components/Pages/Home";
 const Home = lazy(() => import("./components/Pages/Home"))
-// import AllDischarges from "./components/Pages/AllDischarges";
 const AllDischarges = lazy(() => import("./components/Pages/AllDischarges"))
-
-// import AllAdmissions from "./components/Pages/AllAdmissions";
 const AllAdmissions = lazy(() => import("./components/Pages/AllAdmissions"))
-
-// import AllTransIn from "./components/Pages/AllTransIn";
 const AllTransIn = lazy(() => import("./components/Pages/AllTransIn"))
-
-// import AllTransOut from "./components/Pages/AllTransOut";
 const AllTransOut = lazy(() => import("./components/Pages/AllTransOut"))
-
-// import AllExpired from "./components/Pages/AllExpired";
 const AllExpired = lazy(() => import("./components/Pages/AllExpired"))
-// import WardPage from "./components/Pages/Wardpage";
 const WardPage = lazy(() => import("./components/Pages/Wardpage"))
-
 const  ExpiredForm = lazy(() => import("./components/Forms/ExpiredForm")) ;
 const DischargeForm = lazy(() => import("./components/Forms/DischargeForm"));
 const AdmissionForm = lazy(() => import("./components/Forms/AdmissionForm"))
 const  TransInform = lazy(() => import("./components/Forms/TransInForm"));
 const  TransOutform = lazy(() => import("./components/Forms/TransOutForm")) ;
-
 const  LoginForm = lazy(() => import("./components/Forms/LoginForm")) ;
 const  SignUpForm = lazy(() => import("./components/Forms/SignUpForm")) ;
 const  UpdateAdmissionForm = lazy(() => import("./components/Forms/UpdateAdmissionForm")) ;
