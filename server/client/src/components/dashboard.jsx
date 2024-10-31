@@ -1,5 +1,5 @@
 'use client'
-
+import WardStatisticsHistory from './reportdashboard'
 import { useState, useEffect, useContext, lazy } from 'react'
 import { Bell, ChevronDown, Layout, Users, Bed, Calendar, Settings, LogOut } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -277,6 +277,11 @@ export default function Dashboard() {
             <Button className="w-full">View All Patients</Button>
             <Button className="w-full">Generate Report</Button>
           </div>
+
+          <WardStatisticsHistory 
+            admissionData={admissionData}
+            selectedWard={selectedWard}
+          />
         </main>
       </div>
     </div>
